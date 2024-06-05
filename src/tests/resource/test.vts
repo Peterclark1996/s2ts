@@ -1,0 +1,8 @@
+import { Instance } from "cspointscript"
+Instance.Msg("Testing, this is a compiled script!")
+
+Instance.Msg("Started" + Instance.GetGameTime())
+
+Instance.PublicMethod("PublicFunc", () => {
+    Instance.Msg("Triggered" + Instance.GetGameTime())
+})
