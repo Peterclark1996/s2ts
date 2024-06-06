@@ -1,15 +1,21 @@
 {
     "name": "s2ts",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "A tool to automatically compile counter-strike TS files (.vts files)",
     "main": "dist/index.js",
     "bin": {
         "s2ts": "dist/cli.js"
     },
+    "files": [
+        "dist",
+        "!**/*.tsbuildinfo"
+    ],
+    "license": "MIT",
     "scripts": {
         "build": "tsc",
         "start": "ts-node --transpile-only --project tsconfig.json src/cli.ts start",
-        "test": "jest"
+        "test": "jest",
+        "publish-npm": "npm run build && npm publish"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.7",
