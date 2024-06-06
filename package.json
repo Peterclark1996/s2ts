@@ -7,9 +7,11 @@
         "s2ts": "dist/cli.js"
     },
     "files": [
+        "types",
         "dist",
         "!**/*.tsbuildinfo"
     ],
+    "types": "types/cspointscript.d.ts",
     "license": "MIT",
     "scripts": {
         "build": "tsc",
