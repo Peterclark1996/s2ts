@@ -1,2 +1,4 @@
 src/examples
 /node_modules
+/dist
+tsconfig.tsbuildinfo

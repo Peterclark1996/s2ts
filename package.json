@@ -1,11 +1,21 @@
 {
+    "name": "s2ts",
+    "version": "1.0.0",
+    "description": "A tool to automatically compile counter-strike TS files (.vts files)",
+    "main": "dist/index.js",
+    "bin": {
+        "s2ts": "dist/cli.js"
+    },
     "scripts": {
+        "build": "tsc",
+        "start": "ts-node --transpile-only --project tsconfig.json src/cli.ts start",
         "test": "jest"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.24.7",
         "@babel/preset-typescript": "^7.24.7",
         "@types/jest": "^29.5.12",
+        "@types/node": "^20.14.2",
         "babel-jest": "^29.7.0",
         "jest": "^29.7.0",
         "prettier": "^3.3.0",
@@ -17,5 +27,8 @@
         "semi": false,
         "arrowParens": "avoid",
         "printWidth": 160
+    },
+    "dependencies": {
+        "chokidar": "^3.6.0"
     }
 }
