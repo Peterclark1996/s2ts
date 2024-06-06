@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { start } from "./index"
 
 const command = process.argv[2]
