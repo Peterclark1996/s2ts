@@ -1,5 +1,5 @@
 # Counter Strike Typescript
-This is a tool that allows you to create .vts typescript scripts for your counter strike maps and compiles them automatically to .vts_c files. You can also import the type defintions for the `Instance` object that these scripts need for interactions with your counter strike map.
+This is a tool that allows you to create .vts typescript scripts for your counter strike maps and compile them automatically to .vts_c files. You can also import the type defintions for the `Instance` object in your scripts.
 
 ## Installation & Usage
 Create a new node project at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`
@@ -47,6 +47,9 @@ Instance.PublicMethod("PublicFunc", () => {
     Instance.Msg("Hello World!") // Runs when the script receives an input of "PublicFunc"
 })
 ```
+
+In hammer, you must add a point_script entity that references your script. It should have a `targetname` key to allow other entities to trigger public methods in the script. It should also have a `script` key that references your script file.
+![point_script_example](point_script_example.png "Example of a point_script to load a helloworld.vts script")
 
 ## Reference
 

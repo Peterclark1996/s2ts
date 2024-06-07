@@ -3,7 +3,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
 import { compileToVts } from "./compile"
 
-const watchDir = path.join(process.cwd(), "./scripts")
+const watchDir = path.join(process.cwd(), "./scripts").replace(/[\\/]+/g, "/")
 
 const sourcePathPart = "/content/csgo_addons"
 const targetPathPart = "/game/csgo_addons"
