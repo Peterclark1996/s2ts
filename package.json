@@ -13,6 +13,14 @@
     ],
     "types": "types/cspointscript.d.ts",
     "license": "MIT",
+    "keywords": [
+        "counter-strike",
+        "source",
+        "source2",
+        "typescript",
+        "vts",
+        "compiler"
+    ],
     "scripts": {
         "build": "tsc",
         "start": "ts-node --transpile-only --project tsconfig.json src/cli.ts start",
