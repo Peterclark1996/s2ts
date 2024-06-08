@@ -20,8 +20,7 @@
         "compiler"
     ],
     "scripts": {
-        "post-build": "ts-node ./src/postBuild.ts",
-        "build": "tsc && npm run post-build",
+        "build": "tsc && ts-node ./src/postBuild.ts",
         "start": "npm run build && ts-node --transpile-only --project tsconfig.json dist/index.js",
         "publish-npm": "npm run build && npm publish"
     },
