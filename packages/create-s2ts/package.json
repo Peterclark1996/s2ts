@@ -1,6 +1,6 @@
 {
     "name": "create-s2ts",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "A tool to scaffold a s2ts project",
     "main": "dist/index.js",
     "bin": {
@@ -20,7 +20,8 @@
         "compiler"
     ],
     "scripts": {
-        "build": "tsc",
+        "post-build": "ts-node ./src/postBuild.ts",
+        "build": "tsc && npm run post-build",
         "start": "npm run build && ts-node --transpile-only --project tsconfig.json dist/index.js",
         "publish-npm": "npm run build && npm publish"
     },

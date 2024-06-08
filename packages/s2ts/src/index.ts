@@ -1,5 +1,5 @@
 import chokidar from "chokidar"
-import { mkdirSync, readFileSync, writeFileSync } from "fs"
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
 import { compileToVts } from "./compile"
 
@@ -34,7 +34,9 @@ export const start = () => {
         return
     }
 
-    mkdirSync(watchDir)
+    if (!existsSync(watchDir)) {
+        mkdirSync(watchDir)
+    }
 
     chokidar
         .watch(watchDir, { persistent: true })
