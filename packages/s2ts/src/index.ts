@@ -13,8 +13,6 @@ const processFile = (filePath: string) => {
 
     const standardFilePath = filePath.replace(/[\\/]+/g, "/")
 
-    console.log(`Compiling: ${path.basename(standardFilePath)}`)
-
     const data = readFileSync(standardFilePath).toString("utf-8")
     const compiledBuffer = compileToVts(data)
 
@@ -23,7 +21,8 @@ const processFile = (filePath: string) => {
     mkdirSync(path.dirname(outputFilePath), { recursive: true })
     writeFileSync(outputFilePath, compiledBuffer)
 
-    console.log(`Compiled: ${path.basename(outputFilePath)}`)
+    const now = new Date()
+    console.log(`${now.toLocaleDateString()} Compiled: ${path.basename(outputFilePath)}`)
 }
 
 export const start = () => {
