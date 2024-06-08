@@ -1,7 +1,19 @@
 # Counter Strike Typescript
 This is a tool that allows you to create .vts typescript scripts for your counter strike maps and compile them automatically to .vts_c files. You can also import the type defintions for the `Instance` object in your scripts.
 
-## Installation & Usage
+## Installation
+### Automatic (Recommended)
+Run create-s2ts at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`
+```shell
+npx create-s2ts
+```
+
+Run the install
+```shell
+npm install
+```
+
+### Manual
 Create a new node project at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`
 ```shell
 npm init -y
@@ -28,14 +40,16 @@ Add s2ts start to your package.json scripts section. Your package.json should lo
 }
 ```
 
+## Usage
+Once installed you can run with the start command
 Start running s2ts
 ```shell
 npm run start
 ```
 
-While running, s2ts will automatically look for any files in your scripts folder `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts`, and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts`.
+While running, s2ts will look for any file updates in your `/scripts` folder `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts`, and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts`.
 
-To start writing a script, create a file with the `.vts` extension in your `/scripts` folder. The contents of this file should start with the types reference, and then an import for Instace from cspointscript. A script might look something like this:
+To start writing a script, create a file with the `.vts` extension in your `/scripts` folder. The contents of this file should start with the types reference, and then an import for Instance from cspointscript. A script might look something like this:
 
 ```ts
 /// <reference types="s2ts/types/cspointscript" />

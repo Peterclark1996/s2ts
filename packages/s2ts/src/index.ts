@@ -34,7 +34,7 @@ export const start = () => {
         return
     }
 
-    mkdirSync(watchDir, { recursive: true })
+    mkdirSync(watchDir)
 
     chokidar
         .watch(watchDir, { persistent: true })
