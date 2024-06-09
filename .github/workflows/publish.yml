@@ -31,21 +31,12 @@ jobs:
       id: get-published-version
       run: echo "::set-output name=version::$(npm show $(jq -r '.name' packages/s2ts/package.json) version)"
 
-    - name: Check version
-      id: check-version
-      run: |
-        CURRENT_VERSION=$(jq -r '.version' packages/s2ts/package.json)
-        PUBLISHED_VERSION=${{ steps.get-published-version.outputs.version }}
-        echo "Current version: $CURRENT_VERSION"
-        echo "Published version: $PUBLISHED_VERSION"
-        if [ "$CURRENT_VERSION" == "$PUBLISHED_VERSION" ]; then
-          echo "Version has not changed. Exiting."
-          echo "::set-output name=version-changed::false"
-        else
-          echo "::set-output name=version-changed::true"
+    - name: Get current non published version
+      id: get-non-published-version
+      run: echo "::set-output name=version-changed::$(jq -r '.version' packages/s2ts/package.json)"
 
     - name: Publish to npm
-      if: steps.check-version.outputs.version != steps.get-published-version.outputs.version
+      if: steps.get-non-published-version.outputs.version != steps.get-published-version.outputs.version
       run: npm run publish-npm
       working-directory: packages/s2ts
       env:
@@ -73,21 +64,12 @@ jobs:
       id: get-published-version
       run: echo "::set-output name=version::$(npm show $(jq -r '.name' packages/create-s2ts/package.json) version)"
 
-    - name: Check version
-      id: check-version
-      run: |
-        CURRENT_VERSION=$(jq -r '.version' packages/create-s2ts/package.json)
-        PUBLISHED_VERSION=${{ steps.get-published-version.outputs.version }}
-        echo "Current version: $CURRENT_VERSION"
-        echo "Published version: $PUBLISHED_VERSION"
-        if [ "$CURRENT_VERSION" == "$PUBLISHED_VERSION" ]; then
-          echo "Version has not changed. Exiting."
-          echo "::set-output name=version-changed::false"
-        else
-          echo "::set-output name=version-changed::true"
+    - name: Get current non published version
+      id: get-non-published-version
+      run: echo "::set-output name=version-changed::$(jq -r '.version' packages/create-s2ts/package.json)"
 
     - name: Publish to npm
-      if: steps.check-version.outputs.version != steps.get-published-version.outputs.version
+      if: steps.get-non-published-version.outputs.version != steps.get-published-version.outputs.version
       run: npm run publish-npm
       working-directory: packages/create-s2ts
       env:
