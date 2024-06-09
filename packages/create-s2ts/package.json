@@ -29,6 +29,7 @@
         "@babel/preset-typescript": "^7.24.7",
         "@types/node": "^20.14.2",
         "prettier": "^3.3.0",
+        "ts-node": "^10.9.2",
         "typescript": "^5.4.5"
     },
     "prettier": {
@@ -37,6 +38,5 @@
         "semi": false,
         "arrowParens": "avoid",
         "printWidth": 160
-    },
-    "dependencies": {}
+    }
 }
