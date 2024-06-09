@@ -22,7 +22,7 @@ const processFile = (filePath: string) => {
     writeFileSync(outputFilePath, compiledBuffer)
 
     const now = new Date()
-    console.log(`${now.toLocaleDateString()} Compiled: ${path.basename(outputFilePath)}`)
+    console.log(`${now.toLocaleTimeString()} Compiled: ${path.basename(outputFilePath)}`)
 }
 
 export const start = () => {
