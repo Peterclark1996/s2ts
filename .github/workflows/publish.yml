@@ -29,14 +29,14 @@ jobs:
 
     - name: Get current published version
       id: get-published-version
-      run: echo "::set-output name=version::$(npm show $(jq -r '.name' packages/s2ts/package.json) version)"
+      run: echo "version-published=$(npm show $(jq -r '.name' packages/s2ts/package.json) version)" >> $GITHUB_OUTPUT
 
     - name: Get current non published version
       id: get-non-published-version
-      run: echo "::set-output name=version-changed::$(jq -r '.version' packages/s2ts/package.json)"
+      run: echo "version-non-published=$(jq -r '.version' packages/s2ts/package.json)" >> $GITHUB_OUTPUT
 
     - name: Publish to npm
-      if: steps.get-non-published-version.outputs.version != steps.get-published-version.outputs.version
+      if: steps.get-non-published-version.outputs.version-non-published != steps.get-published-version.outputs.version-published
       run: npm run publish-npm
       working-directory: packages/s2ts
       env:
@@ -62,14 +62,14 @@ jobs:
 
     - name: Get current published version
       id: get-published-version
-      run: echo "::set-output name=version::$(npm show $(jq -r '.name' packages/create-s2ts/package.json) version)"
+      run: echo "version-published=$(npm show $(jq -r '.name' packages/s2ts/package.json) version)" >> $GITHUB_OUTPUT
 
     - name: Get current non published version
       id: get-non-published-version
-      run: echo "::set-output name=version-changed::$(jq -r '.version' packages/create-s2ts/package.json)"
+      run: echo "version-non-published=$(jq -r '.version' packages/s2ts/package.json)" >> $GITHUB_OUTPUT
 
     - name: Publish to npm
-      if: steps.get-non-published-version.outputs.version != steps.get-published-version.outputs.version
+      if: steps.get-non-published-version.outputs.version-non-published != steps.get-published-version.outputs.version-published
       run: npm run publish-npm
       working-directory: packages/create-s2ts
       env:
