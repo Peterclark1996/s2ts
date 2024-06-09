@@ -2,8 +2,10 @@
 This is a tool that allows you to create .vts typescript scripts for your counter strike maps and compile them automatically to .vts_c files. You can also import the type defintions for the `Instance` object in your scripts.
 
 ## Installation
-### Automatic (Recommended)
-Run create-s2ts at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`
+<details>
+  <summary>Automatic (Recommended)</summary>
+
+Run `npx create-s2ts` at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`
 ```shell
 npx create-s2ts
 ```
@@ -13,7 +15,11 @@ Run the install:
 npm install
 ```
 
-### Manual
+</details>
+
+<details>
+  <summary>Manual (Not recommended)</summary>
+
 Create a new node project at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`
 ```shell
 npm init -y
@@ -39,6 +45,8 @@ Add s2ts start to your package.json scripts section. Your package.json should lo
     ...
 }
 ```
+
+</details>
 
 ## Usage
 Once installed you can run with the start command:
