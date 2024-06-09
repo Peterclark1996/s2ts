@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'packages/s2ts/package.json'
-      - 'packages/create-s2ts/package.json'
+    # paths:
+    #   - 'packages/s2ts/package.json'
+    #   - 'packages/create-s2ts/package.json'
 
 jobs:
   publish-s2ts:
@@ -40,7 +40,9 @@ jobs:
         echo "Published version: $PUBLISHED_VERSION"
         if [ "$CURRENT_VERSION" == "$PUBLISHED_VERSION" ]; then
           echo "Version has not changed. Exiting."
-          exit 0
+          echo "::set-output name=version-changed::false"
+        else
+          echo "::set-output name=version-changed::true"
 
     - name: Publish to npm
       if: steps.check-version.outputs.version != steps.get-published-version.outputs.version
@@ -80,7 +82,9 @@ jobs:
         echo "Published version: $PUBLISHED_VERSION"
         if [ "$CURRENT_VERSION" == "$PUBLISHED_VERSION" ]; then
           echo "Version has not changed. Exiting."
-          exit 0
+          echo "::set-output name=version-changed::false"
+        else
+          echo "::set-output name=version-changed::true"
 
     - name: Publish to npm
       if: steps.check-version.outputs.version != steps.get-published-version.outputs.version
