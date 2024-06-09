@@ -68,11 +68,11 @@ jobs:
 
     - name: Get current published version
       id: get-published-version
-      run: echo "version-published=$(npm show $(jq -r '.name' packages/s2ts/package.json) version)" >> $GITHUB_OUTPUT
+      run: echo "version-published=$(npm show $(jq -r '.name' packages/create-s2ts/package.json) version)" >> $GITHUB_OUTPUT
 
     - name: Get current non published version
       id: get-non-published-version
-      run: echo "version-non-published=$(jq -r '.version' packages/s2ts/package.json)" >> $GITHUB_OUTPUT
+      run: echo "version-non-published=$(jq -r '.version' packages/create-s2ts/package.json)" >> $GITHUB_OUTPUT
 
     - name: Print versions
       id: print-versions
