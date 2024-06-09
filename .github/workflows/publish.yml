@@ -1,0 +1,90 @@
+name: Publish to npm
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/s2ts/package.json'
+      - 'packages/create-s2ts/package.json'
+
+jobs:
+  publish-s2ts:
+    name: Publish s2ts
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: packages/s2ts
+
+    - name: Get current published version
+      id: get-published-version
+      run: echo "::set-output name=version::$(npm show $(jq -r '.name' packages/s2ts/package.json) version)"
+
+    - name: Check version
+      id: check-version
+      run: |
+        CURRENT_VERSION=$(jq -r '.version' packages/s2ts/package.json)
+        PUBLISHED_VERSION=${{ steps.get-published-version.outputs.version }}
+        echo "Current version: $CURRENT_VERSION"
+        echo "Published version: $PUBLISHED_VERSION"
+        if [ "$CURRENT_VERSION" == "$PUBLISHED_VERSION" ]; then
+          echo "Version has not changed. Exiting."
+          exit 0
+
+    - name: Publish to npm
+      if: steps.check-version.outputs.version != steps.get-published-version.outputs.version
+      run: npm run publish-npm
+      working-directory: packages/s2ts
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-create-s2ts:
+    name: Publish create s2ts
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: packages/create-s2ts
+
+    - name: Get current published version
+      id: get-published-version
+      run: echo "::set-output name=version::$(npm show $(jq -r '.name' packages/create-s2ts/package.json) version)"
+
+    - name: Check version
+      id: check-version
+      run: |
+        CURRENT_VERSION=$(jq -r '.version' packages/create-s2ts/package.json)
+        PUBLISHED_VERSION=${{ steps.get-published-version.outputs.version }}
+        echo "Current version: $CURRENT_VERSION"
+        echo "Published version: $PUBLISHED_VERSION"
+        if [ "$CURRENT_VERSION" == "$PUBLISHED_VERSION" ]; then
+          echo "Version has not changed. Exiting."
+          exit 0
+
+    - name: Publish to npm
+      if: steps.check-version.outputs.version != steps.get-published-version.outputs.version
+      run: npm run publish-npm
+      working-directory: packages/create-s2ts
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
