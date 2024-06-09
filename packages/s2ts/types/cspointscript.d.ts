@@ -59,7 +59,7 @@ interface Instance {
      *
      * @param playerId the player slot of the player to get the pawn of.
      */
-    GetPlayerPawn(playerId: string | number | boolean): Pawn
+    GetPlayerPawn(playerId: string | number | boolean): Pawn | undefined
 
     /**
      * Triggers an action on an entity.
@@ -86,7 +86,7 @@ interface Instance {
     /**
      * Triggers an action on an entity.
      *
-     * @param target the index of the entity to trigger the action on. Target can be an entity targetname, !self, !activator, !caller or !player
+     * @param target the index of the entity to trigger the action on. Target can be an entity targetname, !self, !activator, !caller or !player.
      * @param operation the operation to trigger on the entity.
      * @param value the value to pass to the action.
      * @param delay the delay in seconds before the action is triggered.
@@ -120,7 +120,7 @@ interface Pawn {
      * @param sWeaponName the name of the weapon to find.
      * @returns the weapon found by name.
      */
-    FindWeapon(sWeaponName: string): Weapon
+    FindWeapon(sWeaponName: string): Weapon | undefined
 
     /**
      * Finds a weapon by slot.
@@ -128,7 +128,7 @@ interface Pawn {
      * @param nSlot the slot of the weapon to find. 0 = Primary, 1 = Secondary, 2 = Knife.
      * @returns the weapon found by slot.
      */
-    FindWeaponBySlot(nSlot: 0 | 1 | 2): Weapon
+    FindWeaponBySlot(nSlot: 0 | 1 | 2): Weapon | undefined
 
     /**
      * Gets the currently active weapon.
@@ -150,6 +150,13 @@ interface Pawn {
     DestroyWeapons(): void
 
     /**
+     * Switches to a weapon.
+     *
+     * @param pWeapon the weapon to switch to.
+     */
+    SwitchToWeapon(pWeapon: Weapon): void
+
+    /**
      * Needs testing.
      */
     SetGunGameImmunity(): unknown
@@ -160,90 +167,326 @@ interface Pawn {
     SetGunGameImmunityColor(): unknown
 
     /**
-     * Needs testing.
+     * Gives an item to the player.
+     *
+     * @param sName the name of the item to give.
      */
-    GiveNamedItem(): unknown
+    GiveNamedItem(sName: string): void
 
     /**
-     * Needs testing.
+     * Gets the controller of the pawn.
+     *
+     * @returns the controller of the pawn.
      */
-    GetCurrentController(): unknown
+    GetCurrentController(): Controller
 
     /**
-     * Needs testing.
+     * Gets the controller of the pawn.
+     *
+     * @returns the controller of the pawn.
      */
     GetOriginalController(): Controller
 
     /**
-     * Needs testing.
+     * Gets the absolute origin of the entity.
+     *
+     * @returns an array of the x y z values.
      */
-    GetAbsOrigin(): unknown
+    GetAbsOrigin(): [number, number, number]
 
     /**
-     * Needs testing.
+     * Gets the origin of the entity.
+     *
+     * @returns an array of the x y z values.
      */
-    GetOrigin(): unknown
+    GetOrigin(): [number, number, number]
 
     /**
-     * Needs testing.
+     * Gets the team number of the pawn.
+     * 0 = Team Selection
+     * 1 = Spectator
+     * 2 = Terrorist
+     * 3 = Counter-Terrorist
+     *
+     * @returns the team number.
      */
-    GetTeamNumber(): unknown
+    GetTeamNumber(): 3 | 2 | 1 | 0
 
     /**
-     * Needs testing.
+     * Sets the team of the pawn (This will kill the player).
+     *
+     * @param iTeamNum the team number to set the pawn to. 0 = Team Selection, 1 = Spectator, 2 = Terrorist, 3 = Counter-Terrorist
      */
-    ChangeTeam(): unknown
+    ChangeTeam(iTeamNum: 3 | 2 | 1 | 0): void
 
     /**
-     * Needs testing.
+     * Gets the name of the pawn type.
+     *
+     * @returns the name of the pawn type.
      */
-    GetClassNam(): unknown
+    GetClassName(): string
 }
 
 interface Controller {
     /**
-     * Needs testing.
+     * Gets the pawn this controller controls.
+     *
+     * @returns the pawn of this Controller.
+     */
+    GetPlayer(): Pawn
+
+    /**
+     * Gets the observer of this controller.
+     *
+     * @returns the observer of this controller.
+     */
+    GetObserver(): Observer
+
+    /**
+     * Gets the score of the controller.
+     *
+     * @returns the score of the controller.
      */
     GetScore(): number
 
     /**
-     * Needs testing.
+     * Adds score the to controller.
+     *
+     * @param nPoints the amount of score to add.
+     */
+    AddScore(nPoints: number): void
+
+    /**
+     * Get the weapon data of the players loadout slot.
+     * 0 = weapon_knife_tactical
+     * 1 = weapon_c4 for Ts and undefined for CTs
+     * 2 = Starting Pistol
+     * 3 = Other Pistols 1
+     * 4 = Other Pistols 2
+     * 5 = Other Pistols 3
+     * 6 = Other Pistols 4
+     * 8 = Mid tier 1
+     * 9 = Mid tier 2
+     * 10 = Mid tier 3
+     * 11 = Mid tier 4
+     * 12 = Mid tier 5
+     * 14 = Rifles 1
+     * 15 = Rifles 2
+     * 16 = Rifles 3
+     * 17 = Rifles 4
+     * 18 = Rifles 5
+     * 25 = weapon_shield
+     * 26 = weapon_flashbang
+     * 27 = weapon_smokegrenade
+     * 28 = weapon_hegrenade
+     * 29 = weapon_molotov for Ts and weapon_incgrenade for CTs
+     * 30 = weapon_decoy
+     * 32 = item_kevlar
+     * 33 = item_assaultsuit
+     * 34 = weapon_taser
+     *
+     * @param nSlot the slot of the weapon to get the data of.
+     */
+    GetWeaponDataForLoadoutSlot(nSlot: number): LoadoutWeaponData | undefined
+
+    /**
+     * Returns true if the controller is observing.
+     *
+     * @returns true if the controller is observing. false otherwise.
+     */
+    IsObserving(): boolean
+
+    /**
+     * Get the player slot of the controller.
+     *
+     * @returns the player slot of the controller.
      */
     GetPlayerSlot(): number
+
+    /**
+     * Returns true if the controller is a bot.
+     *
+     * @returns true if the controller is a bot. false otherwise.
+     */
+    IsFakeClient(): boolean
+
+    /**
+     * Gets the absolute origin of the entity.
+     *
+     * @returns an array of the x y z values.
+     */
+    GetAbsOrigin(): [number, number, number]
+
+    /**
+     * Gets the origin of the entity.
+     *
+     * @returns an array of the x y z values.
+     */
+    GetOrigin(): [number, number, number]
+
+    /**
+     * Gets the team number of the pawn.
+     * 0 = Team Selection
+     * 1 = Spectator
+     * 2 = Terrorist
+     * 3 = Counter-Terrorist
+     *
+     * @returns the team number.
+     */
+    GetTeamNumber(): 3 | 2 | 1 | 0
+
+    /**
+     * Sets the team of the pawn (This will kill the player).
+     *
+     * @param iTeamNum the team number to set the pawn to. 0 = Team Selection, 1 = Spectator, 2 = Terrorist, 3 = Counter-Terrorist
+     */
+    ChangeTeam(iTeamNum: 3 | 2 | 1 | 0): void
+
+    /**
+     * Gets the name of the entity.
+     *
+     * @returns the name of the entity.
+     */
+    GetClassName(): string
+}
+
+interface Observer {
+    /**
+     * Needs testing.
+     */
+    GetObserverMode(): number
+
+    /**
+     * Needs testing.
+     */
+    SetObserverMode(mode: number): unknown
+
+    /**
+     * Gets the controller of this observer.
+     *
+     * @returns the controller of this observer.
+     */
+    GetCurrentController(): Controller
+
+    /**
+     * Gets the absolute origin of the entity.
+     *
+     * @returns an array of the x y z values.
+     */
+    GetAbsOrigin(): [number, number, number]
+
+    /**
+     * Gets the origin of the entity.
+     *
+     * @returns an array of the x y z values.
+     */
+    GetOrigin(): [number, number, number]
+
+    /**
+     * Gets the team number of the pawn.
+     * 0 = Team Selection
+     * 1 = Spectator
+     * 2 = Terrorist
+     * 3 = Counter-Terrorist
+     *
+     * @returns the team number.
+     */
+    GetTeamNumber(): 3 | 2 | 1 | 0
+
+    /**
+     * Sets the team of the pawn (This will kill the player).
+     *
+     * @param iTeamNum the team number to set the pawn to. 0 = Team Selection, 1 = Spectator, 2 = Terrorist, 3 = Counter-Terrorist
+     */
+    ChangeTeam(iTeamNum: 3 | 2 | 1 | 0): void
+
+    /**
+     * Gets the name of the entity.
+     *
+     * @returns the name of the entity.
+     */
+    GetClassName(): string
 }
 
 interface Weapon {
     /**
-     * Needs testing.
+     * Gets the loadout data for this weapon.
+     *
+     * @returns the loadout data for this weapon.
      */
-    GetData(): unknown
+    GetData(): LoadoutWeaponData
 
     /**
-     * Needs testing.
+     * Gets the absolute origin of the entity.
+     *
+     * @returns an array of the x y z values.
      */
-    GetAbsOrigin(): unknown
+    GetAbsOrigin(): [number, number, number]
 
     /**
-     * Needs testing.
+     * Gets the origin of the entity.
+     *
+     * @returns an array of the x y z values.
      */
-    GetOrigin(): unknown
+    GetOrigin(): [number, number, number]
 
     /**
-     * Needs testing.
+     * Gets the team number of the pawn.
+     * 0 = Team Selection
+     * 1 = Spectator
+     * 2 = Terrorist
+     * 3 = Counter-Terrorist
+     *
+     * @returns the team number.
      */
-    GetTeamNumber(): unknown
+    GetTeamNumber(): 3 | 2 | 1 | 0
 
     /**
-     * Needs testing.
+     * Sets the team of the pawn (This will kill the player).
+     *
+     * @param iTeamNum the team number to set the pawn to. 0 = Team Selection, 1 = Spectator, 2 = Terrorist, 3 = Counter-Terrorist
      */
-    ChangeTeam(): unknown
+    ChangeTeam(iTeamNum: 3 | 2 | 1 | 0): void
 
+    /**
+     * Gets the name of the entity.
+     *
+     * @returns the name of the entity.
+     */
+    GetClassName(): string
+}
+
+interface LoadoutWeaponData {
     /**
      * Gets the name of the weapon.
      *
      * @returns the name of the weapon.
      */
-    GetClassName(): string
+    GetName(): number
+
+    /**
+     * Gets the type of the weapon.
+     * 0 = knife
+     * 1 = pistol
+     * 2 = light machine gun
+     * 3 = rifle
+     * 4 = shotgun
+     * 5 = sniper
+     * 7 = c4
+     * 9 = grenade
+     * 10 = kevlar
+     * 19 = shield
+     *
+     * @returns the type of the weapon.
+     */
+    GetType(): number
+
+    /**
+     * Gets the price of the weapon.
+     *
+     * @returns the price of the weapon.
+     */
+    GetPrice(): number
 }
 
 declare module "cspointscript" {

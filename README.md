@@ -1,4 +1,4 @@
-# Counter Strike Typescript
+# Counter Strike Typescript Compiler
 This is a tool that allows you to create .vts typescript scripts for your counter strike maps and compile them automatically to .vts_c files. You can also import the type defintions for the `Instance` object in your scripts.
 
 ## Installation
