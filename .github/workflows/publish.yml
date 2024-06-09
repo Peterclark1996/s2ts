@@ -35,6 +35,12 @@ jobs:
       id: get-non-published-version
       run: echo "version-non-published=$(jq -r '.version' packages/s2ts/package.json)" >> $GITHUB_OUTPUT
 
+    - name: Print versions
+      id: print-versions
+      run: |
+        echo "Published version: ${{ steps.get-published-version.outputs.version-published }}"
+        echo "Non published version: ${{ steps.get-non-published-version.outputs.version-non-published }}"
+
     - name: Publish to npm
       if: steps.get-non-published-version.outputs.version-non-published != steps.get-published-version.outputs.version-published
       run: npm run publish-npm
@@ -67,6 +73,12 @@ jobs:
     - name: Get current non published version
       id: get-non-published-version
       run: echo "version-non-published=$(jq -r '.version' packages/s2ts/package.json)" >> $GITHUB_OUTPUT
+
+    - name: Print versions
+      id: print-versions
+      run: |
+        echo "Published version: ${{ steps.get-published-version.outputs.version-published }}"
+        echo "Non published version: ${{ steps.get-non-published-version.outputs.version-non-published }}"
 
     - name: Publish to npm
       if: steps.get-non-published-version.outputs.version-non-published != steps.get-published-version.outputs.version-published
