@@ -1,7 +1,7 @@
 import chokidar from "chokidar"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
-import { compileToVts } from "./compile"
+import { compileVtsFile } from "./compile"
 
 const watchDir = path.join(process.cwd(), "./scripts").replace(/[\\/]+/g, "/")
 
@@ -14,7 +14,7 @@ const processFile = (filePath: string) => {
     const standardFilePath = filePath.replace(/[\\/]+/g, "/")
 
     const data = readFileSync(standardFilePath).toString("utf-8")
-    const compiledBuffer = compileToVts(data)
+    const compiledBuffer = compileVtsFile(data)
 
     const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(sourcePathPart, targetPathPart)
 

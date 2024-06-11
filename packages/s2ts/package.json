@@ -1,6 +1,6 @@
 {
     "name": "s2ts",
-    "version": "0.1.7",
+    "version": "0.2.0",
     "description": "A tool to automatically compile counter-strike TS files (.vts files)",
     "main": "dist/index.js",
     "bin": {
@@ -22,7 +22,7 @@
         "compiler"
     ],
     "scripts": {
-        "build": "tsc",
+        "build": "tsc --project tsconfig.build.json",
         "start": "ts-node --transpile-only --project tsconfig.json src/cli.ts start",
         "test": "jest",
         "publish-npm": "npm run build && npm publish"

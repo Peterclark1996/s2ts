@@ -1,0 +1,14 @@
+import { Instance } from "cspointscript"
+
+type Player = {
+    name: string
+    score: number
+}
+
+const printPlayer = (player: Player) => {
+    Instance.Msg(player.name + " has a score of " + player.score)
+}
+
+Instance.PublicMethod("PublicFunc", () => {
+    printPlayer({ name: "Player1", score: 100 })
+})

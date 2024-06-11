@@ -1,6 +1,26 @@
+import { ModuleKind, ScriptTarget, transpileModule } from "typescript"
+
 const version: number = 8
 
-export const compileToVts = (data: string): Buffer => {
+export const compileVtsFile = (data: string): Buffer => {
+    const transpiledData = transpileTypeScript(data)
+    return compileToVtsc(transpiledData)
+}
+
+const transpileTypeScript = (source: string): string => {
+    const result = transpileModule(source, {
+        compilerOptions: {
+            module: ModuleKind.ESNext,
+            target: ScriptTarget.ES2015,
+            removeComments: true,
+            esModuleInterop: false,
+            allowSyntheticDefaultImports: false
+        }
+    })
+    return result.outputText
+}
+
+const compileToVtsc = (data: string): Buffer => {
     const dataSize = Buffer.byteLength(data, "utf-8")
     const newData: number[] = []
     const StatBytes: Uint8Array = serializeCs2kv3(data)
