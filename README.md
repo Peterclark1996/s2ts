@@ -1,9 +1,9 @@
 # Source 2 TypeScript
-A counter strike 2 typescript compiler that automatically compiles `.vts` typescript scripts into valve `.vts_c` files. Also includes type defintions for the `Instance` object used to interface with CS2.
+A counter strike 2 typescript compiler that automatically compiles `.vts` and `.ts` typescript files into valve `.vts_c` files. Also includes type defintions for the `Instance` object used to interface with CS2.
 
 ## Features
 - Partial type definitions for cspointscript's `Instance` class
-- Auto compile `.vts` typescript files into `.vts_c`, the format needed to run in CS2 maps
+- Auto compile `.vts` and `.ts` typescript files into `.vts_c`, the format needed to run in CS2 maps
 - Auto transpiling of typescript to javascript (Needed for `.vts_c` files)
 
 ## Installation
@@ -23,7 +23,7 @@ Once installed you can run with the start command:
 npm run start
 ```
 
-1. While running, s2ts will look for any file updates to `.vts` files in your `/scripts` folder at `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts` and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts`.
+1. While running, s2ts will look for any file updates to `.vts` and `.ts` files in your `/scripts` folder at `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts` and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts`.
 
 2. In hammer, you need to add a point_script entity that references your script. It should have a `targetname` key to allow other entities to trigger public methods in the script. It should also have a `script` key that references your script file.
 ![point_script_example](point_script_example.png "Example of a point_script to load an example.vts script")

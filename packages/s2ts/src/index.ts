@@ -7,14 +7,14 @@ const sourcePathPart = "/content/csgo_addons"
 const targetPathPart = "/game/csgo_addons"
 
 const processFile = (filePath: string) => {
-    if (!filePath.endsWith(".vts")) return
+    if (!filePath.endsWith(".vts") && !filePath.endsWith(".ts")) return
 
     const standardFilePath = standardisePath(filePath)
 
     const data = readFileSync(standardFilePath).toString("utf-8")
     const compiledBuffer = compileVtsFile(data)
 
-    const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(sourcePathPart, targetPathPart)
+    const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(".ts", ".vts_c").replace(sourcePathPart, targetPathPart)
 
     mkdirSync(path.dirname(outputFilePath), { recursive: true })
     writeFileSync(outputFilePath, compiledBuffer)
