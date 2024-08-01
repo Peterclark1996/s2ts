@@ -25,3 +25,12 @@ test("I can compile a vts typescript file and get a correctly formed vts_c javas
 
     expect(actual).toBe(expected)
 })
+
+test("I can compile a vts file and see the s2ts version in the header of the vts_c file", async () => {
+    const sourcePath = path.join(__dirname, "/resource/test.vts")
+    const data = readFileSync(sourcePath).toString("utf-8")
+
+    const actual = compileVtsFile(data).toString("utf-8")
+
+    expect(actual).toContain(`// s2ts v${process.env.npm_package_version}`)
+})

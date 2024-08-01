@@ -1,10 +1,10 @@
 import { ModuleKind, ScriptTarget, transpileModule } from "typescript"
-
-const version: number = 8
+import { s2tsVersion } from "."
 
 export const compileVtsFile = (data: string): Buffer => {
     const transpiledData = transpileTypeScript(data)
-    return compileToVtsc(transpiledData)
+    const transpiledDataWithVersion = addS2tsVersion(transpiledData)
+    return compileToVtsc(transpiledDataWithVersion)
 }
 
 const transpileTypeScript = (source: string): string => {
@@ -20,6 +20,10 @@ const transpileTypeScript = (source: string): string => {
     return result.outputText
 }
 
+const addS2tsVersion = (data: string): string => {
+    return `// s2ts v${s2tsVersion}\n${data}`
+}
+
 const compileToVtsc = (data: string): Buffer => {
     const dataSize = Buffer.byteLength(data, "utf-8")
     const newData: number[] = []
@@ -28,7 +32,7 @@ const compileToVtsc = (data: string): Buffer => {
 
     newData.push(...intToBytes(fileSize))
     newData.push(...intToBytes(131084)) // unknown constant
-    newData.push(...intToBytes(version))
+    newData.push(...intToBytes(8)) // version
     newData.push(...intToBytes(3)) // unknown constant
     newData.push(...Array.from(Buffer.from("RED2", "ascii")))
     newData.push(...intToBytes(0)) // offset

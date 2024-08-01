@@ -3,6 +3,8 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
 import { compileVtsFile } from "./compile"
 
+export const s2tsVersion = process.env.npm_package_version
+
 const sourcePathPart = "/content/csgo_addons"
 const targetPathPart = "/game/csgo_addons"
 
