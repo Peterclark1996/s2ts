@@ -32,5 +32,5 @@ test("I can compile a vts file and see the s2ts version in the header of the vts
 
     const actual = compileVtsFile(data).toString("utf-8")
 
-    expect(actual).toContain(`// s2ts v${process.env.npm_package_version}`)
+    expect(actual).toContain("// s2ts v0.0.0")
 })

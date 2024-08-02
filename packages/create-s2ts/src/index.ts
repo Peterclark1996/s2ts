@@ -5,6 +5,7 @@ import path from "path"
 
 const rootPath = process.cwd().replace(/[\\/]+/g, "/")
 const sourcePathPart = "/content/csgo_addons"
+const s2tsVersion = "0.0.0"
 
 const run = () => {
     console.log(`Creating s2ts project at ${rootPath}`)
@@ -24,7 +25,7 @@ const run = () => {
                 start: "s2ts start"
             },
             dependencies: {
-                s2ts: process.env.npm_package_version
+                s2ts: s2tsVersion
             }
         },
         null,
