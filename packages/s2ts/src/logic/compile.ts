@@ -1,30 +1,4 @@
-import { ModuleKind, ScriptTarget, transpileModule } from "typescript"
-import { s2tsVersion } from "."
-
-export const compileVtsFile = (data: string): Buffer => {
-    const transpiledData = transpileTypeScript(data)
-    const transpiledDataWithVersion = addS2tsVersion(transpiledData)
-    return compileToVtsc(transpiledDataWithVersion)
-}
-
-const transpileTypeScript = (source: string): string => {
-    const result = transpileModule(source, {
-        compilerOptions: {
-            module: ModuleKind.ESNext,
-            target: ScriptTarget.ES2015,
-            removeComments: true,
-            esModuleInterop: false,
-            allowSyntheticDefaultImports: false
-        }
-    })
-    return result.outputText
-}
-
-const addS2tsVersion = (data: string): string => {
-    return `// s2ts v${s2tsVersion}\n${data}`
-}
-
-const compileToVtsc = (data: string): Buffer => {
+export const compileToVtsc = (data: string): Buffer => {
     const dataSize = Buffer.byteLength(data, "utf-8")
     const newData: number[] = []
     const StatBytes: Uint8Array = serializeCs2kv3(data)

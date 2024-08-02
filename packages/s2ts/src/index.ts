@@ -1,7 +1,9 @@
 import chokidar from "chokidar"
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
-import { compileVtsFile } from "./compile"
+import { addS2tsVersion } from "./logic/version"
+import { compileToVtsc } from "./logic/compile"
+import { transpileToTypeScript } from "./logic/transpile"
 
 export const s2tsVersion = "0.0.0"
 
@@ -31,17 +33,17 @@ export const start = (specifiedPath: string | undefined) => {
     console.log(`Watching for file changes in ${watchDir}`)
 }
 
-const processFileAtPath = (filePath: string) => {
+export const processFileData = (fileData: string) => Promise.resolve(fileData).then(transpileToTypeScript).then(addS2tsVersion).then(compileToVtsc)
+
+const processFileAtPath = async (filePath: string) => {
     if (!filePath.endsWith(".vts") && !filePath.endsWith(".ts")) return
 
     const standardFilePath = standardisePath(filePath)
-
     const data = readFileSync(standardFilePath).toString("utf-8")
 
-    const compiledBuffer = compileVtsFile(data)
+    const compiledBuffer = await processFileData(data)
 
     const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(".ts", ".vts_c").replace(sourcePathPart, targetPathPart)
-
     mkdirSync(path.dirname(outputFilePath), { recursive: true })
     writeFileSync(outputFilePath, compiledBuffer)
 
