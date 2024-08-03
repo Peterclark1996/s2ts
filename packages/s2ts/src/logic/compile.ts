@@ -24,7 +24,10 @@ export const compileToVtsc = (data: string): Buffer => {
         newData.push(...intToBytes(0)) // size
     }
 
-    newData.push(...Array.from(Buffer.from(data, "utf-8")))
+    const dataBuffer = Buffer.from(data, "utf-8")
+    for (const byte of dataBuffer) {
+        newData.push(byte)
+    }
     newData.push(...Array.from(StatBytes))
     return Buffer.from(newData)
 }

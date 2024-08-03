@@ -6,7 +6,7 @@ test("I can compile a vts file and get a correctly formed vts_c file", async () 
     const sourcePath = path.join(__dirname, "/resource/test.vts")
     const data = readFileSync(sourcePath).toString("utf-8")
 
-    const actualBuffer = await processFileData(data)
+    const actualBuffer = await processFileData(".", { name: "test.ts", data })
     const actual = actualBuffer.toString("utf-8")
 
     const expectedPath = path.join(__dirname, "/resource/test.vts_c")
@@ -19,7 +19,7 @@ test("I can compile a vts typescript file and get a correctly formed vts_c javas
     const sourcePath = path.join(__dirname, "/resource/test_withTypes.vts")
     const data = readFileSync(sourcePath).toString("utf-8")
 
-    const actualBuffer = await processFileData(data)
+    const actualBuffer = await processFileData(".", { name: "test.ts", data })
     const actual = actualBuffer.toString("utf-8")
 
     const expectedPath = path.join(__dirname, "/resource/test_withTypes.vts_c")
@@ -32,7 +32,7 @@ test("I can compile a vts file and see the s2ts version in the header of the vts
     const sourcePath = path.join(__dirname, "/resource/test.vts")
     const data = readFileSync(sourcePath).toString("utf-8")
 
-    const actualBuffer = await processFileData(data)
+    const actualBuffer = await processFileData(".", { name: "test.ts", data })
     const actual = actualBuffer.toString("utf-8")
 
     expect(actual).toContain("// s2ts v0.0.0")
