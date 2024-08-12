@@ -45,7 +45,7 @@ Instance.PublicMethod("PublicFunc", () => {
     Instance.Msg("Hello World!") // Runs when the script receives an input of "PublicFunc"
 })`
 
-    writeFileSync(path.join(rootPath, "scripts/example.vts"), exampleScript)
+    writeFileSync(path.join(rootPath, "scripts/example.ts"), exampleScript)
 
     console.log("Successfully created s2ts project")
 }
