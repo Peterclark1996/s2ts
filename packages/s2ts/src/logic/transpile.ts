@@ -1,6 +1,6 @@
 import { ModuleKind, ScriptTarget, transpileModule } from "typescript"
 
-export const transpileToTypeScript = (source: string): string => {
+export const transpileFromTypeScript = (source: string): string => {
     const result = transpileModule(source, {
         compilerOptions: {
             module: ModuleKind.ESNext,

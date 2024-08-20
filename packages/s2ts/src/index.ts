@@ -3,8 +3,9 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
 import { addS2tsVersion } from "./logic/version"
 import { compileToVtsc } from "./logic/compile"
-import { transpileToTypeScript } from "./logic/transpile"
+import { transpileFromTypeScript } from "./logic/transpile"
 import { bundleImports } from "./logic/rollup"
+import { VtsFile } from "./types/file"
 
 export const s2tsVersion = "0.0.0"
 
@@ -35,13 +36,6 @@ export const start = (specifiedPath: string | undefined) => {
     console.log(`Watching for file changes in ${watchDir}`)
 }
 
-export const processFileData = async (pathForProject: string, file: { name: string; data: string }) => {
-    const transpiledData = transpileToTypeScript(file.data)
-    const bundledData = await bundleImports(pathForProject, { name: file.name, code: transpiledData })
-    const bundledDataWithVersion = addS2tsVersion(bundledData)
-    return compileToVtsc(bundledDataWithVersion)
-}
-
 const processFileAtPath = async (pathFor: { project: string; file: string }) => {
     if (!pathFor.file.endsWith(".vts") && !pathFor.file.endsWith(".ts")) return
 
@@ -49,7 +43,8 @@ const processFileAtPath = async (pathFor: { project: string; file: string }) => 
 
     const compiledBuffer = await processFileData(pathFor.project, {
         name: path.basename(standardFilePath),
-        data: readFileSync(standardFilePath).toString("utf-8")
+        path: standardFilePath,
+        content: readFileSync(standardFilePath).toString("utf-8")
     })
 
     const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(".ts", ".vts_c").replace(sourcePathPart, targetPathPart)
@@ -58,6 +53,13 @@ const processFileAtPath = async (pathFor: { project: string; file: string }) => 
 
     const now = new Date()
     console.log(`${now.toLocaleTimeString()} Compiled: ${path.basename(outputFilePath)}`)
+}
+
+export const processFileData = async (pathForProject: string, file: VtsFile) => {
+    const transpiledData = transpileFromTypeScript(file.content)
+    const bundledData = await bundleImports(pathForProject, { ...file, content: transpiledData })
+    const bundledDataWithVersion = addS2tsVersion(bundledData)
+    return compileToVtsc(bundledDataWithVersion)
 }
 
 const standardisePath = (fullPath: string) => fullPath.replace(/[\\/]+/g, "/")
