@@ -4,9 +4,9 @@ import { processFileData } from "../src/index"
 
 test("I can compile a vts file and get a correctly formed vts_c file", async () => {
     const sourcePath = path.join(__dirname, "/resource/test.vts")
-    const data = readFileSync(sourcePath).toString("utf-8")
+    const content = readFileSync(sourcePath).toString("utf-8")
 
-    const actualBuffer = await processFileData(".", { name: "test.ts", data })
+    const actualBuffer = await processFileData(".", { name: "test.ts", path: "./test.ts", content })
     const actual = actualBuffer.toString("utf-8")
 
     const expectedPath = path.join(__dirname, "/resource/test.vts_c")
@@ -17,9 +17,9 @@ test("I can compile a vts file and get a correctly formed vts_c file", async () 
 
 test("I can compile a vts typescript file and get a correctly formed vts_c javascript file", async () => {
     const sourcePath = path.join(__dirname, "/resource/test_withTypes.vts")
-    const data = readFileSync(sourcePath).toString("utf-8")
+    const content = readFileSync(sourcePath).toString("utf-8")
 
-    const actualBuffer = await processFileData(".", { name: "test.ts", data })
+    const actualBuffer = await processFileData(".", { name: "test.ts", path: "./test.ts", content })
     const actual = actualBuffer.toString("utf-8")
 
     const expectedPath = path.join(__dirname, "/resource/test_withTypes.vts_c")
@@ -30,9 +30,9 @@ test("I can compile a vts typescript file and get a correctly formed vts_c javas
 
 test("I can compile a vts file and see the s2ts version in the header of the vts_c file", async () => {
     const sourcePath = path.join(__dirname, "/resource/test.vts")
-    const data = readFileSync(sourcePath).toString("utf-8")
+    const content = readFileSync(sourcePath).toString("utf-8")
 
-    const actualBuffer = await processFileData(".", { name: "test.ts", data })
+    const actualBuffer = await processFileData(".", { name: "test.ts", path: "./test.ts", content })
     const actual = actualBuffer.toString("utf-8")
 
     expect(actual).toContain("// s2ts v0.0.0")
