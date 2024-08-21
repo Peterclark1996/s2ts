@@ -25,9 +25,17 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
 
             return null
         },
-        load: (id: string) => {
-            if (id === file.name) return file.content
-            if (fs.existsSync(id)) return transpileFromTypeScript(fs.readFileSync(id, "utf-8"))
+        load: (path: string) => {
+            if (path === file.name) return file.content
+            if (fs.existsSync(path)) {
+                const transpiledResult = transpileFromTypeScript({
+                    name: path,
+                    path,
+                    content: fs.readFileSync(path, "utf-8")
+                })
+
+                if (transpiledResult.success) return transpiledResult.output
+            }
 
             return null
         }
@@ -44,7 +52,8 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
             virtualPlugin,
             typescript({
                 module: "ESNext",
-                target: "ES2015"
+                target: "ES2015",
+                outputToFilesystem: false
             })
         ],
         external: ["cspointscript"],

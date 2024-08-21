@@ -6,6 +6,7 @@ import { compileToVtsc } from "./logic/compile"
 import { transpileFromTypeScript } from "./logic/transpile"
 import { bundleImports } from "./logic/rollup"
 import { VtsFile } from "./types/file"
+import { logger } from "./log"
 
 export const s2tsVersion = "0.0.0"
 
@@ -17,7 +18,7 @@ export const start = (specifiedPath: string | undefined) => {
     const watchDir = standardisePath(path.join(projectDir, "./scripts"))
 
     if (!watchDir.includes(sourcePathPart)) {
-        console.error(
+        logger.error(
             `The current path '${watchDir}' was expected to contain '${sourcePathPart}' but it did not. Check if you are running in the correct folder.`
         )
         return
@@ -31,9 +32,9 @@ export const start = (specifiedPath: string | undefined) => {
         .watch(watchDir, { persistent: true })
         .on("add", filePath => processFileAtPath({ project: projectDir, file: filePath }))
         .on("change", filePath => processFileAtPath({ project: projectDir, file: filePath }))
-        .on("error", error => console.error(`Watcher error: ${error}`))
+        .on("error", error => logger.error(`Watcher error: ${error}`))
 
-    console.log(`Watching for file changes in ${watchDir}`)
+    logger.info(`Watching for file changes in ${watchDir}`)
 }
 
 const processFileAtPath = async (pathFor: { project: string; file: string }) => {
@@ -41,23 +42,30 @@ const processFileAtPath = async (pathFor: { project: string; file: string }) => 
 
     const standardFilePath = standardisePath(pathFor.file)
 
-    const compiledBuffer = await processFileData(pathFor.project, {
-        name: path.basename(standardFilePath),
-        path: standardFilePath,
-        content: readFileSync(standardFilePath).toString("utf-8")
-    })
+    try {
+        const compiledBuffer = await processFileData(pathFor.project, {
+            name: path.basename(standardFilePath),
+            path: standardFilePath,
+            content: readFileSync(standardFilePath).toString("utf-8")
+        })
 
-    const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(".ts", ".vts_c").replace(sourcePathPart, targetPathPart)
-    mkdirSync(path.dirname(outputFilePath), { recursive: true })
-    writeFileSync(outputFilePath, compiledBuffer)
+        if (!compiledBuffer) return
 
-    const now = new Date()
-    console.log(`${now.toLocaleTimeString()} Compiled: ${path.basename(outputFilePath)}`)
+        const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(".ts", ".vts_c").replace(sourcePathPart, targetPathPart)
+        mkdirSync(path.dirname(outputFilePath), { recursive: true })
+        writeFileSync(outputFilePath, compiledBuffer)
+
+        logger.info(`Compiled: ${path.basename(outputFilePath)}`)
+    } catch (error) {
+        logger.error(`Error in s2ts: ${error}`)
+    }
 }
 
 export const processFileData = async (pathForProject: string, file: VtsFile) => {
-    const transpiledData = transpileFromTypeScript(file.content)
-    const bundledData = await bundleImports(pathForProject, { ...file, content: transpiledData })
+    const transpiledResult = transpileFromTypeScript(file)
+    if (!transpiledResult.success) return
+
+    const bundledData = await bundleImports(pathForProject, { ...file, content: transpiledResult.output })
     const bundledDataWithVersion = addS2tsVersion(bundledData)
     return compileToVtsc(bundledDataWithVersion)
 }

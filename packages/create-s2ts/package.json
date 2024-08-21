@@ -1,6 +1,6 @@
 {
     "name": "create-s2ts",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "A tool to scaffold a s2ts project",
     "main": "dist/index.js",
     "bin": {
