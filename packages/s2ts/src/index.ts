@@ -53,11 +53,11 @@ const processFileAtPath = async (pathFor: { project: string; file: string }) => 
 
         const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(".ts", ".vts_c").replace(sourcePathPart, targetPathPart)
         mkdirSync(path.dirname(outputFilePath), { recursive: true })
-        writeFileSync(outputFilePath, compiledBuffer)
+        writeFileSync(outputFilePath, new Uint8Array(compiledBuffer))
 
         logger.info(`Compiled: ${path.basename(outputFilePath)}`)
     } catch (error) {
-        logger.error(`Error in s2ts: ${error}`)
+        logger.error(`Unhandled error in s2ts: ${error}`)
     }
 }
 

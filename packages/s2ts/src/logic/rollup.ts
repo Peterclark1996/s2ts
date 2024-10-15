@@ -56,13 +56,7 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
                 outputToFilesystem: false
             })
         ],
-        external: ["cspointscript"],
-        onwarn: (warning, warn) => {
-            if (warning.code === "UNRESOLVED_IMPORT") {
-                throw new Error(`Module "${warning.exporter}" could not be resolved in file "${warning.id}"`)
-            }
-            warn(warning)
-        }
+        external: ["cspointscript"]
     })
 
     const { output } = await bundle.generate({
