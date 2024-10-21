@@ -23,7 +23,7 @@
     ],
     "scripts": {
         "build": "tsc --project tsconfig.build.json && ts-node ./src/postBuild.ts",
-        "start": "ts-node --transpile-only --project tsconfig.json src/cli.ts start \"C:\\Program Files (x86)\\Steam\\steamapps\\common\\Counter-Strike Global Offensive\\content\\csgo_addons\\scriptingtest\"",
+        "start": "ts-node --transpile-only --project tsconfig.json src/cli.ts start",
         "test": "jest --testMatch **/tests/**/*.test.ts",
         "publish-npm": "npm run build && npm publish"
     },
