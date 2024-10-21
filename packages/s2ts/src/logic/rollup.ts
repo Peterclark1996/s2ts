@@ -1,5 +1,4 @@
 import * as rollup from "rollup"
-import typescript from "@rollup/plugin-typescript"
 import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import path from "path"
@@ -49,12 +48,7 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
                 extensions: supportedExtensions
             }),
             commonjs(),
-            virtualPlugin,
-            typescript({
-                module: "ESNext",
-                target: "ES2015",
-                outputToFilesystem: false
-            })
+            virtualPlugin
         ],
         external: ["cspointscript"]
     })
