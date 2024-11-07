@@ -8,11 +8,12 @@ interface Instance {
 
     /**
      * Defines a public method that can be called from the I/O system in the map.
+     * Currently passing in a parameter to the method does not work.
      *
      * @param methodName the name needed in the "Via this input" field of the I/O system.
      * @param method the method to call when the I/O system calls the method.
      */
-    PublicMethod(methodName: string, method: (input: string | number | boolean) => void): void
+    PublicMethod<T extends string | number | boolean>(methodName: string, method: (input: T) => void): void
 
     /**
      * Gets the current game time in seconds from when the map started.
