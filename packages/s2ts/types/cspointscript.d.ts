@@ -62,6 +62,13 @@ interface Instance {
      */
     GetPlayerPawn(playerId: string | number | boolean): Pawn | undefined
 
+     /**
+     * Gets the origin of a entity.
+     *
+     * @returns an array of the x y z values.
+     */
+    GetEntityOrigin(entity: Entity | Pawn): [number, number, number]
+
     /**
      * Triggers an action on an entity.
      *
