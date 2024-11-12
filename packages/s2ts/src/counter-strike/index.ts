@@ -1,5 +1,8 @@
-import { Instance } from "cspointscript"
+import { Vector } from "./vector"
+import { Color } from "./color"
+import { gameEvent } from "./gameEvent"
+import { addOutputByName } from "./commands/addOutputByName"
+import { runServerCommand } from "./commands/util"
+import { createEntity } from "./commands/createEntity"
 
-export const runServerCommand = (command: string) => {
-    Instance.EntFireAtName("s2ts-server-command", "Command", command)
-}
+export { Color, Vector, runServerCommand, addOutputByName, createEntity, gameEvent }
