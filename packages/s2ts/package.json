@@ -2,28 +2,13 @@
     "name": "s2ts",
     "version": "0.3.7",
     "description": "A tool to automatically compile counter-strike TS files (.vts files)",
-    "main": "dist/index.js",
+    "main": "dist/main.js",
     "exports": {
-        ".": {
-            "types": "./types/cspointscript.d.ts",
-            "default": "./dist/index.js"
-        },
         "./counter-strike": {
             "types": "./dist/counter-strike/index.d.ts",
             "default": "./dist/counter-strike/index.js"
         },
-        "./types/cspointscript": "./types/cspointscript.d.ts",
-        "./types/*": "./types/*"
-    },
-    "typesVersions": {
-        "*": {
-            "types/cspointscript": [
-                "./types/cspointscript.d.ts"
-            ],
-            "*": [
-                "./types/*"
-            ]
-        }
+        "./types/cspointscript": "./types/cspointscript.d.ts"
     },
     "bin": {
         "s2ts": "dist/cli.js"
