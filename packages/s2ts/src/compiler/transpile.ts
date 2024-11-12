@@ -1,5 +1,5 @@
 import { ModuleKind, ScriptTarget, transpileModule, flattenDiagnosticMessageText } from "typescript"
-import { VtsFile } from "../types/file"
+import { VtsFile } from "./file"
 import { logger } from "../log"
 
 export const transpileFromTypeScript = (file: VtsFile): { output: string; success: boolean } => {

@@ -1,0 +1,8 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "noEmit": false
+    },
+    "include": ["./src/compiler", "./src/index.ts", "./src/cli.ts"]
+}

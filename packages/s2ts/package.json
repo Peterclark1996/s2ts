@@ -22,7 +22,10 @@
         "compiler"
     ],
     "scripts": {
-        "build": "tsc --project tsconfig.build.json && ts-node ./src/postBuild.ts",
+        "build": "npm run build:compiler && npm run build:library && npm run build:post",
+        "build:compiler": "tsc --project tsconfig.build-compiler.json",
+        "build:library": "tsc --project tsconfig.build-library.json",
+        "build:post": "ts-node ./src/postBuild.ts",
         "start": "ts-node --transpile-only --project tsconfig.json src/cli.ts start",
         "test": "jest --testMatch **/tests/**/*.test.ts",
         "publish-npm": "npm run build && npm publish"

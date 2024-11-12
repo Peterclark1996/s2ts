@@ -4,7 +4,7 @@ import commonjs from "@rollup/plugin-commonjs"
 import path from "path"
 import fs from "fs"
 import { transpileFromTypeScript } from "./transpile"
-import { VtsFile } from "../types/file"
+import { VtsFile } from "./file"
 
 const supportedExtensions = [".js", ".ts", ".vts"]
 
