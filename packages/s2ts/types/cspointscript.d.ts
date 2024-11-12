@@ -121,6 +121,33 @@ interface ClientInstance extends Instance {
     ClientThink(func: () => void): void
 }
 
+interface Entity {
+    /**
+     * Gets the absolute origin of the entity.
+     *
+     * @returns an array of the x y z values.
+     */
+    GetAbsOrigin(): [number, number, number]
+
+    /**
+     * Gets the origin of the entity.
+     *
+     * @returns an array of the x y z values.
+     */
+    GetOrigin(): [number, number, number]
+
+    /**
+     * Gets the team number of the pawn.
+     * 0 = Team Selection
+     * 1 = Spectator
+     * 2 = Terrorist
+     * 3 = Counter-Terrorist
+     *
+     * @returns the team number.
+     */
+    GetTeamNumber(): 3 | 2 | 1 | 0
+}
+
 interface Pawn {
     /**
      * Finds a weapon by name.
