@@ -1,6 +1,6 @@
 import { readFileSync } from "fs"
 import path from "path"
-import { processFileData } from "../src/index"
+import { processFileData } from "../src/cli"
 
 test("I can compile a vts file and get a correctly formed vts_c file", async () => {
     const sourcePath = path.join(__dirname, "/resource/test.vts")

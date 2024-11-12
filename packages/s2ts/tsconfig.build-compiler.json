@@ -4,5 +4,5 @@
         "module": "commonjs",
         "noEmit": false
     },
-    "include": ["./src/compiler", "./src/index.ts", "./src/cli.ts"]
+    "include": ["./src/compiler", "./src/cli.ts"]
 }

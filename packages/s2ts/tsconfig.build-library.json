@@ -5,5 +5,5 @@
         "noEmit": false,
         "declaration": true
     },
-    "include": ["./src/counter-strike"]
+    "include": ["./src/index.ts", "./src/counter-strike"]
 }
