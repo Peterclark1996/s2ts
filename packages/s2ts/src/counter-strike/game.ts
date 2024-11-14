@@ -1,4 +1,6 @@
 import { Instance } from "cspointscript"
+import { createEntity } from "./commands/createEntity"
+import { addOutputByName } from "./commands/addOutputByName"
 
 const eventTypes = ["weapon_fire", "round_start"] as const
 
@@ -31,12 +33,29 @@ Instance.PublicMethod("s2ts-on_tick", () => {
     tickListeners.forEach(fn => fn())
 })
 
-const game = {
+export const game = {
     on: (eventType: (typeof eventTypes)[number], fn: () => void) => eventListeners[eventType].push(fn),
     onTick: (fn: () => void) => tickListeners.push(fn),
-    runNextTick: (fn: () => void) => delayedFunctions.push({ fn, delay: 0 }),
+    runNextTick: (fn: () => void) => delayedFunctions.push({ fn, delay: 1 }),
     runAfterDelayTicks: (fn: () => void, delay: number) => delayedFunctions.push({ fn, delay }),
     runAfterDelaySeconds: (fn: () => void, delay: number) => delayedFunctions.push({ fn, delay: Math.ceil(delay * ticksPerSecond) })
 }
 
-export { game }
+const setupEventListeners = () => {
+    createEntity({
+        class: "logic_eventlistener",
+        keyValues: {
+            targetName: "s2ts-event_listener-weapon_fire",
+            eventName: "weapon_fire"
+        }
+    })
+
+    game.runAfterDelaySeconds(() => {
+        addOutputByName("s2ts-event_listener-weapon_fire", {
+            outputName: "OnEventFired",
+            targetName: "s2ts-script",
+            viaThisInput: "s2ts-event-weapon_fire"
+        })
+    }, 0.1)
+}
+game.on("round_start", setupEventListeners)

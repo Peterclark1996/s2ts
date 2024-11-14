@@ -5,13 +5,13 @@ export const addOutputByName = (
     output: {
         outputName: string
         targetName: string
-        inputName: string
+        viaThisInput: string
         parameter?: string | number
         delay?: number
         maxTimesToFire?: number
     }
 ) => {
-    const command = `ent_fire ${entityName} addoutput ${output.outputName}>${output.targetName}>${output.inputName}>${output.parameter ?? ""}>${
+    const command = `ent_fire ${entityName} addoutput ${output.outputName}>${output.targetName}>${output.viaThisInput}>${output.parameter ?? ""}>${
         output.delay ?? ""
     }>${output.maxTimesToFire ?? ""}`
     runServerCommand(command)
