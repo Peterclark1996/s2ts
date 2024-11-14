@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdirSync, writeFileSync } from "fs"
+import { copyFileSync, mkdirSync, writeFileSync } from "fs"
 import path from "path"
 
 const rootPath = process.cwd().replace(/[\\/]+/g, "/")
@@ -38,14 +38,19 @@ const run = () => {
 
     const exampleScript = `/// <reference types="s2ts/types/cspointscript" />
 import { Instance } from "cspointscript"
+import { runServerCommand } from "s2ts/counter-strike"
 
 Instance.Msg("Hello World!") // Runs when the script starts
 
 Instance.PublicMethod("PublicFunc", () => {
-    Instance.Msg("Hello World!") // Runs when the script receives an input of "PublicFunc"
+    runServerCommand("say I just pressed the button!") // Runs when the script receives an input of "PublicFunc"
 })`
 
-    writeFileSync(path.join(rootPath, "scripts/example.ts"), exampleScript)
+    writeFileSync(path.join(rootPath, "scripts/main.ts"), exampleScript)
+
+    const templateMapPath = path.join(__dirname, "../assets/s2tsmap.vmap")
+    const targetMapPath = path.join(rootPath, "maps/s2tsmap.vmap")
+    copyFileSync(templateMapPath, targetMapPath)
 
     console.log("Successfully created s2ts project")
 }

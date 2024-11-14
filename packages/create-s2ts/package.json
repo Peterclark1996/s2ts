@@ -8,6 +8,7 @@
     },
     "files": [
         "dist",
+        "assets/s2tsmap.vmap",
         "!**/*.tsbuildinfo"
     ],
     "license": "MIT",
