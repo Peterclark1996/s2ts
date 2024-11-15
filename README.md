@@ -8,9 +8,9 @@ A counter strike 2 typescript bundler that automatically compiles `.vts` and `.t
 - Auto bundling of imports from node modules
 
 ## Installation
-Run `npx create-s2ts` at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`. This will setup a node project and create an example script.
+Run `npx create-s2ts@latest` at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`. This will setup a node project and create an example script.
 ```shell
-npx create-s2ts
+npx create-s2ts@latest
 ```
 
 Run the install:
@@ -33,7 +33,7 @@ npm run start
 You can find an example typescript script at `/scripts/main.ts`. Update and save this script while s2ts is running, and the script will be compiled. If you are running your map, you must re-compile the map for this new script to take effect.
 
 > [!NOTE]
-> If you are using the example `maps/s2tsmap.vmap` map, then you can skip the next part of this section and look at "Utility Library Usage"
+> If you are using the example `maps/s2tsmap.vmap` map (Added as part of `create-s2ts` but can be downloaded [here](https://github.com/Peterclark1996/s2ts/raw/refs/heads/main/packages/create-s2ts/assets/s2tsmap.vmap)), then you can skip the next part of this section and look at "Utility Library Usage"
 
 In hammer, you need to add a point_script entity that references your script. It should have a `targetname` key to allow other entities to trigger public methods in the script. It should also have a `script` key that references your script file. 
 > [!IMPORTANT]
@@ -42,7 +42,7 @@ In hammer, you need to add a point_script entity that references your script. It
 ![point_script_example](point_script_example.png "Example of a point_script to load an example.ts script")
 
 ## Utility Library Usage
-This project also provides some utility functions. These can be imported into your script from `s2ts/counter-strike`. To use any of these functions you need to be using the `maps/s2tsmap.vmap` example map, or set up the required entities yourself.
+This project also provides some utility functions. These can be imported into your script from `s2ts/counter-strike`. To use any of these functions you need to be using the `maps/s2tsmap.vmap` example map (Added as part of `create-s2ts` but can be downloaded [here](https://github.com/Peterclark1996/s2ts/raw/refs/heads/main/packages/create-s2ts/assets/s2tsmap.vmap)), or set up the required entities yourself.
 
 ## Reference
 
