@@ -9,8 +9,8 @@ on:
     #   - 'packages/create-s2ts/package.json'
 
 jobs:
-  publish-s2ts:
-    name: Publish s2ts
+  publish-packages:
+    name: Publish Packages
     runs-on: ubuntu-latest
 
     steps:
@@ -23,69 +23,53 @@ jobs:
         node-version: '16'
         registry-url: 'https://registry.npmjs.org'
 
-    - name: Install dependencies
+    - name: s2ts / Install dependencies
       run: npm install
       working-directory: packages/s2ts
 
-    - name: Run tests
+    - name: s2ts / Run tests
       run: npm test
       working-directory: packages/s2ts
 
-    - name: Get current published version
-      id: get-published-version
+    - name: s2ts / Get current published version
+      id: s2ts-get-published-version
       run: echo "version-published=$(npm show $(jq -r '.name' packages/s2ts/package.json) version)" >> $GITHUB_OUTPUT
 
-    - name: Get current non published version
-      id: get-non-published-version
+    - name: s2ts / Get current non published version
+      id: s2ts-get-non-published-version
       run: echo "version-non-published=$(jq -r '.version' packages/s2ts/package.json)" >> $GITHUB_OUTPUT
 
-    - name: Print versions
-      id: print-versions
+    - name: s2ts / Print versions
       run: |
-        echo "Published version: ${{ steps.get-published-version.outputs.version-published }}"
-        echo "Non published version: ${{ steps.get-non-published-version.outputs.version-non-published }}"
+        echo "Published version: ${{ steps.s2ts-get-published-version.outputs.version-published }}"
+        echo "Non published version: ${{ steps.s2ts-get-non-published-version.outputs.version-non-published }}"
 
-    - name: Publish to npm
-      if: steps.get-non-published-version.outputs.version-non-published != steps.get-published-version.outputs.version-published
+    - name: s2ts / Publish to npm
+      if: steps.s2ts-get-non-published-version.outputs.version-non-published != steps.s2ts-get-published-version.outputs.version-published
       run: npm run publish-npm
       working-directory: packages/s2ts
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-  publish-create-s2ts:
-    name: Publish create s2ts
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
-        registry-url: 'https://registry.npmjs.org'
-
-    - name: Install dependencies
+    - name: create-s2ts / Install dependencies
       run: npm install
       working-directory: packages/create-s2ts
 
-    - name: Get current published version
-      id: get-published-version
+    - name: create-s2ts / Get current published version
+      id: create-s2ts-get-published-version
       run: echo "version-published=$(npm show $(jq -r '.name' packages/create-s2ts/package.json) version)" >> $GITHUB_OUTPUT
 
-    - name: Get current non published version
-      id: get-non-published-version
+    - name: create-s2ts / Get current non published version
+      id: create-s2ts-get-non-published-version
       run: echo "version-non-published=$(jq -r '.version' packages/create-s2ts/package.json)" >> $GITHUB_OUTPUT
 
-    - name: Print versions
-      id: print-versions
+    - name: create-s2ts / Print versions
       run: |
-        echo "Published version: ${{ steps.get-published-version.outputs.version-published }}"
-        echo "Non published version: ${{ steps.get-non-published-version.outputs.version-non-published }}"
+        echo "Published version: ${{ steps.create-s2ts-get-published-version.outputs.version-published }}"
+        echo "Non published version: ${{ steps.create-s2ts-get-non-published-version.outputs.version-non-published }}"
 
-    - name: Publish to npm
-      if: steps.get-non-published-version.outputs.version-non-published != steps.get-published-version.outputs.version-published
+    - name: create-s2ts / Publish to npm
+      if: steps.create-s2ts-get-non-published-version.outputs.version-non-published != steps.create-s2ts-get-published-version.outputs.version-published
       run: npm run publish-npm
       working-directory: packages/create-s2ts
       env:
