@@ -30,6 +30,8 @@ npm run start
 
 ![output_public_fun_example](output_public_fun_example.png "Example of an output triggering a public function on a point_script")
 
+- Public functions can also take string parameters but must be declared with the correct type, for example `Instance.PublicMethod("PublicFunc", (input: string) => {})`. Input in this case would be what ever is specified in the "With a parameter override of" field.
+
 You can find an example typescript script at `/scripts/main.ts`. Update and save this script while s2ts is running, and the script will be compiled. If you are running your map, you must re-compile the map for this new script to take effect.
 
 > [!NOTE]

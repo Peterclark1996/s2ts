@@ -8,10 +8,13 @@ interface Instance {
 
     /**
      * Defines a public method that can be called from the I/O system in the map.
-     * Currently passing in a parameter to the method does not work.
+     *
+     * To pass a value into the method, it must have a type specified. For example: `PublicMethod("MyMethod", (input: string) => { ... })`
+     *
+     * Right now no matter what the input type is declared as, it will always be a string. So it will require manual casting to the correct type.
      *
      * @param methodName the name needed in the "Via this input" field of the I/O system.
-     * @param method the method to call when the I/O system calls the method.
+     * @param method the method to call when the I/O system calls the public method.
      */
     PublicMethod<T extends string | number | boolean>(methodName: string, method: (input: T) => void): void
 
