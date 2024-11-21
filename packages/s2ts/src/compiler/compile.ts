@@ -1,8 +1,10 @@
-export const compileToVtsc = (data: string): Buffer => {
+import { PublicMethodDeclaration } from "./publicMethods"
+
+export const compileToVtsc = (data: string, publicMethods: PublicMethodDeclaration[]): Buffer => {
     const dataSize = Buffer.byteLength(data, "utf-8")
     const newData: number[] = []
-    const StatBytes: Uint8Array = serializeCs2kv3(data)
-    const fileSize = dataSize + 52 + StatBytes.length
+    const statBytes: Uint8Array = serializeCs2kv3(publicMethods)
+    const fileSize = dataSize + 52 + statBytes.length
 
     newData.push(...intToBytes(fileSize))
     newData.push(...intToBytes(131084)) // unknown constant
@@ -16,9 +18,9 @@ export const compileToVtsc = (data: string): Buffer => {
     newData.push(...intToBytes(dataSize)) // size
     newData.push(...Array.from(Buffer.from("STAT", "ascii")))
 
-    if (StatBytes.length > 0) {
+    if (statBytes.length > 0) {
         newData.push(...intToBytes(dataSize + 8)) // offset
-        newData.push(...intToBytes(StatBytes.length)) // size
+        newData.push(...intToBytes(statBytes.length)) // size
     } else {
         newData.push(...intToBytes(0)) // offset
         newData.push(...intToBytes(0)) // size
@@ -28,36 +30,15 @@ export const compileToVtsc = (data: string): Buffer => {
     for (const byte of dataBuffer) {
         newData.push(byte)
     }
-    newData.push(...Array.from(StatBytes))
+    newData.push(...Array.from(statBytes))
     return Buffer.from(newData)
 }
 
-const serializeCs2kv3 = (data: string): Uint8Array => {
+const serializeCs2kv3 = (publicMethods: PublicMethodDeclaration[]): Uint8Array => {
     const bytes: number[] = []
-    const publicMethods: string[] = []
-    const publicSplt = data.split("PublicMethod(")
-    let textForBytes = "publicMethods\0"
-
-    for (let i = 1; i < publicSplt.length; i++) {
-        const value = publicSplt[i]
-        if (value === undefined) throw new Error("Invalid value in publicSplt array at index " + i + " of " + publicSplt.length)
-
-        const methodSplt = value.trim().split('"')
-        const methodFirst = methodSplt[1]
-        if (methodFirst === undefined) throw new Error("Invalid value in methodSplt array at index 1 of " + methodSplt)
-        publicMethods.push(methodFirst)
-
-        const methodSecond = methodSplt[2]
-        if (methodSecond === undefined) throw new Error("Invalid value in methodSplt array at index 2 of " + methodSplt)
-        const typeSplt = methodSecond.trim().split("*")
-        if (typeSplt.length > 1) {
-            const typeSplitValue = typeSplt[1]
-            if (typeSplitValue === undefined) throw new Error("Invalid value in typeSplt array at index 1 of " + typeSplt)
-            textForBytes += methodFirst + `\0${typeSplitValue.trim()}\0`
-        } else {
-            textForBytes += methodFirst + "\0none\0"
-        }
-    }
+    let textForBytes = publicMethods.reduce((acc, method) => {
+        return acc + `${method.methodName}\0${method.argType}\0`
+    }, "publicMethods\0")
 
     textForBytes += "\t\t"
     for (let i = 0; i < publicMethods.length; i++) {

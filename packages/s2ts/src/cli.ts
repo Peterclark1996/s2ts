@@ -9,6 +9,7 @@ import { transpileFromTypeScript } from "./compiler/transpile"
 import { bundleImports } from "./compiler/rollup"
 import { VtsFile } from "./compiler/file"
 import { logger } from "./log"
+import { extractPublicMethods } from "./compiler/publicMethods"
 
 export const s2tsVersion = "0.0.0"
 
@@ -64,12 +65,20 @@ const processFileAtPath = async (pathFor: { project: string; file: string }) => 
 }
 
 export const processFileData = async (pathForProject: string, file: VtsFile) => {
+    const publicMethodsFromSource = extractPublicMethods(file.content)
+
     const transpiledResult = transpileFromTypeScript(file)
     if (!transpiledResult.success) return
 
     const bundledData = await bundleImports(pathForProject, { ...file, content: transpiledResult.output })
+
+    const publicMethodNamessFromSource = publicMethodsFromSource.map(method => method.methodName)
+    const publicMethodsFromBundle = extractPublicMethods(bundledData).filter(method => !publicMethodNamessFromSource.includes(method.methodName))
+
+    const publicMethods = [...publicMethodsFromSource, ...publicMethodsFromBundle]
+
     const bundledDataWithVersion = addS2tsVersion(bundledData)
-    return compileToVtsc(bundledDataWithVersion)
+    return compileToVtsc(bundledDataWithVersion, publicMethods)
 }
 
 const standardisePath = (fullPath: string) => fullPath.replace(/[\\/]+/g, "/")

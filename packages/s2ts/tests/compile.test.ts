@@ -37,3 +37,16 @@ test("I can compile a vts file and see the s2ts version in the header of the vts
 
     expect(actual).toContain("// s2ts v0.0.0")
 })
+
+test("I can compile a vts file with public methods with args and get a correctly formed STAT header", async () => {
+    const sourcePath = path.join(__dirname, "/resource/test_withPublicMethodArgs.vts")
+    const content = readFileSync(sourcePath).toString("utf-8")
+
+    const actualBuffer = await processFileData(".", { name: "test.ts", path: "./test.ts", content })
+    const actual = actualBuffer?.toString("utf-8")
+
+    const expectedPath = path.join(__dirname, "/resource/test_withPublicMethodArgs.vts_c")
+    const expected = readFileSync(expectedPath).toString("utf-8")
+
+    expect(actual).toBe(expected)
+})

@@ -1,0 +1,13 @@
+import { Instance } from "cspointscript"
+
+Instance.PublicMethod("StringTest", (value: string) => {
+    Instance.Msg(value)
+})
+
+Instance.PublicMethod("NumberTest", (value: number) => {
+    Instance.Msg(value)
+})
+
+Instance.PublicMethod("BooleanTest", (value: boolean) => {
+    Instance.Msg(value)
+})
