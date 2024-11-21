@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - 'packages/s2ts/package.json'
-    #   - 'packages/create-s2ts/package.json'
+    paths:
+      - 'packages/s2ts/package.json'
+      - 'packages/create-s2ts/package.json'
 
 jobs:
   publish-packages:
