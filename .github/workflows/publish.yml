@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'packages/s2ts/package.json'
-      - 'packages/create-s2ts/package.json'
+    # paths:
+    #   - 'packages/s2ts/package.json'
+    #   - 'packages/create-s2ts/package.json'
 
 jobs:
   publish-s2ts:
@@ -25,6 +25,10 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+      working-directory: packages/s2ts
+
+    - name: Run tests
+      run: npm test
       working-directory: packages/s2ts
 
     - name: Get current published version

@@ -2,6 +2,10 @@ import { readFileSync } from "fs"
 import path from "path"
 import { processFileData } from "../src/cli"
 
+test("Failing test to prove CI works", () => {
+    throw new Error("This is a failing test")
+})
+
 test("I can compile a vts file and get a correctly formed vts_c file", async () => {
     const sourcePath = path.join(__dirname, "/resource/test.vts")
     const content = readFileSync(sourcePath).toString("utf-8")
