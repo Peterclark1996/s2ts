@@ -1,8 +1,7 @@
-import { Vector } from "./vector"
-import { Color } from "./color"
-import { game } from "./game"
-import { addOutputByName } from "./commands/addOutputByName"
-import { runServerCommand } from "./commands/util"
-import { createEntity } from "./commands/createEntity"
-
-export { Color, Vector, runServerCommand, addOutputByName, createEntity, game }
+export { Vector } from "./vector"
+export { Color } from "./color"
+export { game } from "./game"
+export { addOutputByName } from "./commands/addOutputByName"
+export { runServerCommand } from "./commands/util"
+export { createEntity } from "./commands/createEntity"
+export { uniqueId } from "./helpers"
