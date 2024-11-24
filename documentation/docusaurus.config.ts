@@ -6,10 +6,8 @@ const config: Config = {
     title: "Source 2 TypeScript",
     tagline: "Documentation for the S2TS Counter Strike 2 TypeScript bundler and library",
     favicon: "img/favicon.ico",
-    url: "https://github.com",
-    baseUrl: "/s2ts/",
-    organizationName: "peterclark1996",
-    projectName: "s2ts",
+    url: "https://s2ts.netlify.app",
+    baseUrl: "/",
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
     i18n: {
