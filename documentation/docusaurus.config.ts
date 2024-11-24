@@ -7,7 +7,7 @@ const config: Config = {
     tagline: "Documentation for the S2TS Counter Strike 2 TypeScript bundler and library",
     favicon: "img/favicon.ico",
     url: "https://s2ts.netlify.app",
-    baseUrl: "/build/",
+    baseUrl: "/",
     onBrokenLinks: "throw",
     onBrokenMarkdownLinks: "warn",
     i18n: {
