@@ -20,7 +20,7 @@ const Home = () => {
                         <Link className="button button--secondary button--lg" to="/docs/getting-started">
                             📝 Getting started 📝
                         </Link>
-                        <Link className="button button--secondary button--lg" to="/docs/cspointscript">
+                        <Link className="button button--secondary button--lg" to="/docs/cspointscript/exported-classes">
                             ⚙️ Valve's 'cspointscript' ⚙️
                         </Link>
                         <Link className="button button--secondary button--lg" to="/docs/helper-library">
