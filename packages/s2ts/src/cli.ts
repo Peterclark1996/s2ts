@@ -71,14 +71,24 @@ export const processFileData = async (pathForProject: string, file: VtsFile) => 
     if (!transpiledResult.success) return
 
     const bundledData = await bundleImports(pathForProject, { ...file, content: transpiledResult.output })
+    const bundledCode = bundledData.code
 
-    const publicMethodNamessFromSource = publicMethodsFromSource.map(method => method.methodName)
-    const publicMethodsFromBundle = extractPublicMethods(bundledData).filter(method => !publicMethodNamessFromSource.includes(method.methodName))
+    const publicMethodNamesFromSource = publicMethodsFromSource.map(method => method.methodName)
+    const publicMethodsFromBundle = []
+
+    for (const moduleId in bundledData.modules) {
+        if (moduleId == file.name || moduleId == file.path) continue
+
+        const standartModulePath = standardisePath(moduleId)
+        const moduleContent = readFileSync(standartModulePath).toString("utf-8")
+        const modulePublicMethods = extractPublicMethods(moduleContent)
+        publicMethodsFromBundle.push(...modulePublicMethods.filter(method => !publicMethodNamesFromSource.includes(method.methodName)))
+    }
 
     const publicMethods = [...publicMethodsFromSource, ...publicMethodsFromBundle]
 
-    const bundledDataWithVersion = addS2tsVersion(bundledData)
-    return compileToVtsc(bundledDataWithVersion, publicMethods)
+    const bundledCodeWithVersion = addS2tsVersion(bundledCode)
+    return compileToVtsc(bundledCodeWithVersion, publicMethods)
 }
 
 const standardisePath = (fullPath: string) => fullPath.replace(/[\\/]+/g, "/")
