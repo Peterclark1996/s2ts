@@ -8,7 +8,7 @@ import { VtsFile } from "./file"
 
 const supportedExtensions = [".js", ".ts", ".vts"]
 
-export const bundleImports = async (pathForProject: string, file: VtsFile): Promise<string> => {
+export const bundleImports = async (pathForProject: string, file: VtsFile): Promise<rollup.OutputChunk> => {
     const virtualPlugin = {
         name: "virtual",
         resolveId: (source: string, importer: string | undefined) => {
@@ -58,6 +58,5 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
         sourcemap: false
     })
 
-    const outputCode = output[0].code
-    return outputCode
+    return output[0]
 }
