@@ -50,14 +50,28 @@ type EntityDefinition =
               renderAmount: number
               renderColor: Color
           }
-          outputs: {}
+          outputs: {
+              onIgnite: () => void
+              onBreak: () => void
+              onHealthChanged: () => void
+              onTakeDamage: () => void
+              onAnimationBegun: () => void
+              onAnimationDone: () => void
+              onAnimationReachedEnd: () => void
+              onAnimationReachedStart: () => void
+              onAnimationLoopCycleDone: () => void
+          }
       }
     | {
           class: "logic_timer"
           keyValues: {
               refireTime: number
           }
-          outputs: {}
+          outputs: {
+              onTimer: () => void
+              onTimerHigh: () => void
+              onTimerLow: () => void
+          }
       }
     | {
           class: "env_explosion"
@@ -91,7 +105,9 @@ type EntityDefinition =
               renderColor: Color
               renderAmount: number
           }
-          outputs: {}
+          outputs: {
+              onBeginFade: () => void
+          }
       }
     | {
           class: "logic_eventlistener"
@@ -116,6 +132,7 @@ type CommonEntityOutputs = {
     onUser2: () => void
     onUser3: () => void
     onUser4: () => void
+    onKilled: () => void
 }
 
 type MiscKeyValues = Record<string, string | number | boolean | Vector | Color | undefined>
