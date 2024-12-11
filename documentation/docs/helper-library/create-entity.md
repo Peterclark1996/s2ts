@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # createEntity
 
-Create an entity with specified key values.
+Create an entity with specified key values and output functions.
 
 :::warning
 Currently the entity will be created on the ground under the specified origin. The origin.z value has no effect.
@@ -24,6 +24,14 @@ Instance.PublicMethod("InputReceived", () => {
             renderAmount: 255,
             renderColor: color,
             solid: "none"
+        },
+        outputs: {
+            onBreak: () => {
+                Instance.Msg("Crate broke!")
+            },
+            onTakeDamage: () => {
+                Instance.Msg("Crate took damage!")
+            }
         }
     })
 })
