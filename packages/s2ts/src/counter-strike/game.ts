@@ -1,7 +1,7 @@
 import { Instance } from "cspointscript"
 import { createEntity } from "./commands/createEntity"
 
-const eventTypes = ["weapon_fire", "round_start"] as const
+export const eventTypes = ["weapon_fire", "round_start"] as const
 type EventType = (typeof eventTypes)[number]
 
 const eventListeners: Record<EventType, (() => void)[]> = {
@@ -40,11 +40,5 @@ export const game = {
     runAfterDelaySeconds: (fn: () => void, delay: number) => delayedFunctions.push({ fn, delay: Math.ceil(delay * ticksPerSecond) })
 }
 
-const setupSpecificEventListener = (eventName: EventType) =>
-    createEntity({
-        class: "logic_eventlistener",
-        keyValues: { targetName: "s2ts-event_listener-" + eventName, eventName },
-        outputs: { onEventFired: () => eventListeners[eventName].forEach(fn => fn()) }
-    })
-
-game.on("round_start", () => eventTypes.filter(eventName => eventName !== "round_start").forEach(setupSpecificEventListener))
+export const createOnEventFiredForEvent = (eventName: EventType, createEventListenerWithOutput: (onEventFired: () => void) => void) =>
+    createEventListenerWithOutput(() => eventListeners[eventName].forEach(fn => fn()))
