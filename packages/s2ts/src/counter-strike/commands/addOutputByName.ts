@@ -14,5 +14,6 @@ export const addOutputByName = (
     const command = `ent_fire ${entityName} addoutput ${output.outputName}>${output.targetName}>${output.viaThisInput}>${output.parameter ?? ""}>${
         output.delay ?? ""
     }>${output.maxTimesToFire ?? ""}`
+
     runServerCommand(command)
 }

@@ -1,5 +1,9 @@
+import { Instance } from "cspointscript"
 import { Color } from "../color"
+import { game } from "../game"
+import { uniqueId } from "../helpers"
 import { Vector } from "../vector"
+import { addOutputByName } from "./addOutputByName"
 import { runServerCommand } from "./util"
 
 const PropDynamicSolid = {
@@ -46,12 +50,14 @@ type EntityDefinition =
               renderAmount: number
               renderColor: Color
           }
+          outputs: {}
       }
     | {
           class: "logic_timer"
           keyValues: {
               refireTime: number
           }
+          outputs: {}
       }
     | {
           class: "env_explosion"
@@ -59,6 +65,7 @@ type EntityDefinition =
               magnitude: number
               sound: string
           }
+          outputs: {}
       }
     | {
           class: "point_worldtext"
@@ -74,6 +81,7 @@ type EntityDefinition =
               reorientMode: keyof typeof PointWorldTextReorientMode
               depthRenderOffset: number
           }
+          outputs: {}
       }
     | {
           class: "env_fade"
@@ -83,6 +91,7 @@ type EntityDefinition =
               renderColor: Color
               renderAmount: number
           }
+          outputs: {}
       }
     | {
           class: "logic_eventlistener"
@@ -90,6 +99,9 @@ type EntityDefinition =
               eventName: string
               enabled: boolean
               team: keyof typeof LogicEventListenerTeam
+          }
+          outputs: {
+              onEventFired: () => void
           }
       }
 
@@ -99,30 +111,57 @@ type CommonEntityKeyValues = {
     angles: Vector
 }
 
+type CommonEntityOutputs = {
+    onUser1: () => void
+    onUser2: () => void
+    onUser3: () => void
+    onUser4: () => void
+}
+
 type MiscKeyValues = Record<string, string | number | boolean | Vector | Color | undefined>
 
 type EntityDefinitionPartial = EntityDefinition extends infer TEntity
-    ? TEntity extends { class: infer TClass; keyValues: infer TKeyValues }
-        ? { class: TClass; keyValues: Partial<CommonEntityKeyValues & TKeyValues>; keyValueOverrides?: MiscKeyValues }
+    ? TEntity extends { class: infer TClass; keyValues: infer TKeyValues; outputs: infer TOutputs }
+        ? {
+              class: TClass
+              keyValues: Partial<CommonEntityKeyValues & TKeyValues>
+              keyValueOverrides?: MiscKeyValues
+              outputs: Partial<TOutputs & CommonEntityOutputs>
+          }
         : never
     : never
 
 type EntityDefinitionOptional = EntityDefinition extends infer TEntity
-    ? TEntity extends { class: infer TClass; keyValues: infer TKeyValues }
-        ? { class: TClass; keyValues?: Partial<CommonEntityKeyValues & TKeyValues>; keyValueOverrides?: MiscKeyValues }
+    ? TEntity extends { class: infer TClass; keyValues: infer TKeyValues; outputs: infer TOutputs }
+        ? {
+              class: TClass
+              keyValues?: Partial<CommonEntityKeyValues & TKeyValues>
+              keyValueOverrides?: MiscKeyValues
+              outputs?: Partial<TOutputs & CommonEntityOutputs>
+          }
         : never
     : never
 
+const customOutputs: Record<string, () => void> = {}
+
+Instance.PublicMethod("s2ts-custom-output", (outputId: string) => {
+    const fn = customOutputs[outputId]
+    if (fn) {
+        fn()
+    }
+})
+
 export const createEntity = (entity: EntityDefinitionOptional): void => {
     const parsedCommonKeyValues = {
-        targetname: entity.keyValues?.targetName,
+        targetname: entity.keyValues?.targetName ?? uniqueId(),
         origin: entity.keyValues?.origin,
         angles: entity.keyValues?.angles
     }
 
     const parsedEntitySpecificKeyValues = parseEntitySpecificKeyValues({
         class: entity.class,
-        keyValues: entity.keyValues ?? {}
+        keyValues: entity.keyValues ?? {},
+        outputs: entity.outputs ?? {}
     })
 
     const fullyParsedKeyValues = {
@@ -154,6 +193,21 @@ export const createEntity = (entity: EntityDefinitionOptional): void => {
         .join(" ")
 
     runServerCommand(`ent_create ${entity.class} { ${entityProps} }`)
+
+    Object.entries(entity.outputs ?? {}).forEach(([outputName, fn]) => {
+        const outputId = uniqueId()
+
+        customOutputs[outputId] = fn
+
+        game.runAfterDelaySeconds(() => {
+            addOutputByName(parsedCommonKeyValues.targetname, {
+                outputName: outputName.charAt(0).toUpperCase() + outputName.slice(1),
+                targetName: "s2ts-script",
+                viaThisInput: "s2ts-custom-output",
+                parameter: outputId
+            })
+        }, 0.1)
+    })
 }
 
 const parseEntitySpecificKeyValues = (entity: EntityDefinitionPartial): MiscKeyValues => {

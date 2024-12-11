@@ -1,7 +1,9 @@
 export type PublicMethodDeclaration = { methodName: string; argType: "none" | "string" | "number" | "boolean" }
 
-export const extractPublicMethods = (data: string): PublicMethodDeclaration[] =>
-    data
+const hardcodeds2tsPublicMethods = [{ methodName: "s2ts-custom-output", argType: "string" }] as const
+
+export const extractPublicMethods = (data: string): PublicMethodDeclaration[] => {
+    const customPublicMethods: PublicMethodDeclaration[] = data
         .split("PublicMethod(")
         .slice(1)
         .map(publicMethodSection => {
@@ -23,3 +25,7 @@ export const extractPublicMethods = (data: string): PublicMethodDeclaration[] =>
 
             return { methodName, argType: methodArgType }
         })
+
+    const hardcodedMethodNames: string[] = hardcodeds2tsPublicMethods.map(method => method.methodName)
+    return [...customPublicMethods.filter(method => !hardcodedMethodNames.includes(method.methodName)), ...hardcodeds2tsPublicMethods]
+}

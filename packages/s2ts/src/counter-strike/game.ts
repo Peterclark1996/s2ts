@@ -1,15 +1,14 @@
 import { Instance } from "cspointscript"
 import { createEntity } from "./commands/createEntity"
-import { addOutputByName } from "./commands/addOutputByName"
 
 const eventTypes = ["weapon_fire", "round_start"] as const
+type EventType = (typeof eventTypes)[number]
 
-const eventListeners: Record<(typeof eventTypes)[number], (() => void)[]> = {
+const eventListeners: Record<EventType, (() => void)[]> = {
     weapon_fire: [],
     round_start: []
 }
 
-Instance.PublicMethod("s2ts-event-weapon_fire", () => eventListeners["weapon_fire"].forEach(fn => fn()))
 Instance.PublicMethod("s2ts-event-round_start", () => eventListeners["round_start"].forEach(fn => fn()))
 
 const ticksPerSecond = 64
@@ -34,28 +33,18 @@ Instance.PublicMethod("s2ts-on_tick", () => {
 })
 
 export const game = {
-    on: (eventType: (typeof eventTypes)[number], fn: () => void) => eventListeners[eventType].push(fn),
+    on: (eventType: EventType, fn: () => void) => eventListeners[eventType].push(fn),
     onTick: (fn: () => void) => tickListeners.push(fn),
     runNextTick: (fn: () => void) => delayedFunctions.push({ fn, delay: 1 }),
     runAfterDelayTicks: (fn: () => void, delay: number) => delayedFunctions.push({ fn, delay }),
     runAfterDelaySeconds: (fn: () => void, delay: number) => delayedFunctions.push({ fn, delay: Math.ceil(delay * ticksPerSecond) })
 }
 
-const setupEventListeners = () => {
+const setupSpecificEventListener = (eventName: EventType) =>
     createEntity({
         class: "logic_eventlistener",
-        keyValues: {
-            targetName: "s2ts-event_listener-weapon_fire",
-            eventName: "weapon_fire"
-        }
+        keyValues: { targetName: "s2ts-event_listener-" + eventName, eventName },
+        outputs: { onEventFired: () => eventListeners[eventName].forEach(fn => fn()) }
     })
 
-    game.runAfterDelaySeconds(() => {
-        addOutputByName("s2ts-event_listener-weapon_fire", {
-            outputName: "OnEventFired",
-            targetName: "s2ts-script",
-            viaThisInput: "s2ts-event-weapon_fire"
-        })
-    }, 0.1)
-}
-game.on("round_start", setupEventListeners)
+game.on("round_start", () => eventTypes.filter(eventName => eventName !== "round_start").forEach(setupSpecificEventListener))
