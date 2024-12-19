@@ -303,8 +303,11 @@ Instance.PublicMethod("s2ts-on_tick", () => {
     functionsForNextTick.forEach(fn => fn())
     functionsForNextTick = []
 
-    for (let i = 0; i < delayedFunctions.length; i++) {
-        const nextFn = delayedFunctions.pop()
+    const functionsToCheck = delayedFunctions.slice()
+    delayedFunctions = []
+
+    for (let i = 0; i < functionsToCheck.length; i++) {
+        const nextFn = functionsToCheck[i]
         if (!nextFn) break
         if (nextFn.delay > 0) {
             game.runAfterDelayTicks(nextFn.fn, nextFn.delay - 1)
