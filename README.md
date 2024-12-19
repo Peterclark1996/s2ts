@@ -1,5 +1,8 @@
 # Source 2 TypeScript
-A counter strike 2 typescript bundler that automatically compiles `.vts` and `.ts` typescript files into valve `.vts_c` files, and bundles imported modules. Also includes type defintions for the `Instance` object used to interface with CS2.
+A counter strike 2 typescript bundler that automatically compiles `.vts` and `.ts` typescript files into valve `.vts_c` files, and bundles imported modules. Also includes type defintions for the `Instance` object used to interface with CS2 and a library of helper functions.
+
+- Documentation for [Valves exported classes](https://s2ts.net/docs/cspointscript/exported-classes)
+- Documentation for [s2ts function library](https://s2ts.net/docs/helper-library)
 
 ## Features
 - Partial type definitions for cspointscript's `Instance` class
