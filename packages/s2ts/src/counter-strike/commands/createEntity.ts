@@ -41,6 +41,11 @@ const LogicEventListenerTeam = {
     "counter-terrorists": 3
 } as const
 
+const PointSoundEventEntityIndexSelection = {
+    "use-world-index": 0,
+    "use-entity-index": 1
+} as const
+
 type EntityDefinition =
     | {
           class: "prop_dynamic"
@@ -118,6 +123,23 @@ type EntityDefinition =
           }
           outputs: {
               onEventFired: () => void
+          }
+      }
+    | {
+          class: "point_soundevent"
+          keyValues: {
+              soundName: string
+              sourceEntityName: string
+              startOnSpawn: boolean
+              toLocalPlayer: boolean
+              retirggerStopsLast: boolean
+              saveAndRestore: boolean
+              entityAttachmentName: string
+              entityIndexSelection: keyof typeof PointSoundEventEntityIndexSelection
+          }
+          outputs: {
+              soundEventGuid: () => void
+              onSoundFinished: () => void
           }
       }
 
@@ -272,6 +294,17 @@ const parseEntitySpecificKeyValues = (entity: EntityDefinitionPartial): MiscKeyV
                 EventName: keyValues.eventName,
                 IsEnabled: keyValues.enabled ?? true,
                 TeamNum: LogicEventListenerTeam[keyValues.team ?? "dont-care"]
+            }
+        case "point_soundevent":
+            return {
+                soundName: keyValues.soundName ?? "",
+                sourceEntityName: keyValues.sourceEntityName ?? "",
+                startOnSpawn: keyValues.startOnSpawn ?? false,
+                toLocalPlayer: keyValues.toLocalPlayer ?? false,
+                stopOnNew: keyValues.retirggerStopsLast ?? true,
+                saveAndRestore: keyValues.saveAndRestore ?? false,
+                sourceEntityAttachment: keyValues.entityAttachmentName ?? "",
+                entityIndexSelection: PointSoundEventEntityIndexSelection[keyValues.entityIndexSelection ?? "use-world-index"]
             }
     }
 }
