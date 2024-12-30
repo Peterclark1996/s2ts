@@ -27,7 +27,7 @@ Once installed you can run with the start command:
 npm run start
 ```
 
-- While running, s2ts will look for any file updates to `.vts` and `.ts` files in your `/scripts` folder at `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts` and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts`.
+- While running, s2ts will look for any file updates to `.vts` and `.ts` files in your `/scripts/vscripts` folder at `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts/vscripts` and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts/vscripts`.
 
 - Public functions can be declared, for example `Instance.PublicMethod("PublicFunc", () => {})` and then these can be called from hammer's input/output system by triggering an output to the point_script entity with the name of the public function in the "Via this input" field.
 
@@ -35,7 +35,7 @@ npm run start
 
 - Public functions can also take string parameters but must be declared with the correct type, for example `Instance.PublicMethod("PublicFunc", (input: string) => {})`. Input in this case would be what ever is specified in the "With a parameter override of" field.
 
-You can find an example typescript script at `/scripts/main.ts`. Update and save this script while s2ts is running, and the script will be compiled. If you are running your map, you must re-compile the map for this new script to take effect.
+You can find an example typescript script at `/scripts/vscripts/main.ts`. Update and save this script while s2ts is running, and the script will be compiled. If you are running your map, you must re-compile the map for this new script to take effect.
 
 > [!NOTE]
 > If you are using the example `maps/s2tsmap.vmap` map (Added as part of `create-s2ts` but can be downloaded [here](https://github.com/Peterclark1996/s2ts/raw/refs/heads/main/packages/create-s2ts/assets/s2tsmap.vmap)), then you can skip the next part of this section and look at "Utility Library Usage"

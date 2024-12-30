@@ -36,6 +36,7 @@ const run = () => {
     tryWriteFile(path.join(rootPath, "package.json"), packageJson, "utf8")
 
     tryCreateFolder(path.join(rootPath, "scripts"))
+    tryCreateFolder(path.join(rootPath, "scripts/vscripts"))
 
     const mainScript = `/// <reference types="s2ts/types/cspointscript" />
 import { Instance } from "cspointscript"
@@ -47,7 +48,7 @@ Instance.PublicMethod("PublicFunc", () => {
     runServerCommand("say I just pressed the button!") // Runs when the script receives an input of "PublicFunc"
 })`
 
-    tryWriteFile(path.join(rootPath, "scripts/main.ts"), mainScript, "utf8")
+    tryWriteFile(path.join(rootPath, "scripts/vscripts/main.ts"), mainScript, "utf8")
     tryWriteFile(path.join(rootPath, "maps/s2tsmap.vmap"), s2tsmap, "base64")
 
     console.log("Successfully created s2ts project")
