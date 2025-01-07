@@ -4,6 +4,10 @@ sidebar_position: 3
 
 # createEntity
 
+:::important
+This function is just a wrapper for the `ent_create` command so requires `sv_cheats` to be enabled. Therefore this is basically unusable outside of local servers.
+:::
+
 Create an entity with specified key values and output functions.
 
 :::warning

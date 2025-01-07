@@ -8,6 +8,10 @@ The `game` object lets you trigger functions when specific game events happen, t
 
 ## game.on
 
+:::important
+This function needs the `ent_create` command to create the event listeners so requires `sv_cheats` to be enabled. Therefore this is basically unusable outside of local servers. Also currently there is no way to get the event data which makes this mostly useless currently.
+:::
+
 Listen to game events and run a function when that event is fired.
 
 <details>
