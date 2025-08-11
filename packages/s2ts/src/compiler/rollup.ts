@@ -44,7 +44,10 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
         input: file.name,
         plugins: [
             resolve({
-                modulePaths: [path.join(pathForProject, "node_modules")],
+                modulePaths: [
+		    path.join(pathForProject, "node_modules"),
+		    path.join(pathForProject, "scripts", "vscripts"),
+		],
                 extensions: supportedExtensions
             }),
             commonjs(),
