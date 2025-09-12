@@ -4,7 +4,7 @@ import type * as Preset from "@docusaurus/preset-classic"
 
 const config: Config = {
     title: "Source 2 TypeScript",
-    tagline: "Documentation for the S2TS Counter Strike 2 TypeScript bundler and library",
+    tagline: "Documentation for the S2TS Counter Strike 2 TypeScript bundler",
     favicon: "img/favicon.ico",
     url: "https://s2ts.netlify.app",
     baseUrl: "/",

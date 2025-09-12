@@ -23,9 +23,6 @@ const Home = () => {
                         <Link className="button button--secondary button--lg" to="/docs/cspointscript/exported-classes">
                             ⚙️ Valve's 'cspointscript' ⚙️
                         </Link>
-                        <Link className="button button--secondary button--lg" to="/docs/helper-library">
-                            📚 S2TS Helper Library 📚
-                        </Link>
                     </div>
                 </div>
             </header>

@@ -7,11 +7,11 @@ sidebar_position: 1
 :::info
 While counter strike 2 has an interface to allow the running of javascript code to interact with the game engine (The successor to squirrel/lua vscripts), it currently isn't fully released/supported by Valve.
 
-S2TS is a project that compiles TypeScript code into .vts_c files that can then run in counter strike 2. Everything here is specific to the S2TS project and might change, break or even become redundent as Valve continue to work on the TypeScript interface with the source 2 engine.
+S2TS is a project that bundles and compiles TypeScript code into .vts_c files that can then run in counter strike 2. Everything here is specific to the S2TS project and might change, break or even become redundent as Valve continue to work on the TypeScript interface with the source 2 engine.
 :::
 
 ## Installation
-Run `npx create-s2ts@latest` at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`. This will setup a node project and create an example map.
+Run `npx create-s2ts@latest` at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`. This will setup a node project with s2ts.
 ```shell
 npx create-s2ts@latest
 ```
@@ -27,9 +27,18 @@ Once installed you can run with the start command:
 npm run start
 ```
 
-While running, s2ts will look for any file updates to `.vts` and `.ts` files in your `/scripts/vscripts` folder at `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts/vscripts` and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts/vscripts`.
+- While running, s2ts will look for any file updates to `.vts` and `.ts` files in your `/scripts/vscripts` folder at `Counter-Strike Global Offensive/content/csgo_addons/<map-name>/scripts/vscripts` and automatically compile then save them to `Counter-Strike Global Offensive/game/csgo_addons/<map-name>/scripts/vscripts`.
 
-You can find an example TypeScript script at `/scripts/vscripts/main.ts`. Update and save this script while s2ts is running, and the script will be compiled. If you are running your map in counter strike, you must re-compile the map for this new script to take effect.
+You can find an example TypeScript script at `/scripts/vscripts/main.ts`. Update and save this script while s2ts is running, and the script will be compiled. If you are running your map in counter strike, you must re-launch the map for this new script to take effect.
 
-## Utility Library Usage
-S2TS also provides some utility functions. These can be imported into your script from `s2ts/counter-strike`. To use any of these functions you need to be using the `maps/s2tsmap.vmap` example map (Created as part of `create-s2ts` but can also be [downloaded here](https://github.com/Peterclark1996/s2ts/raw/refs/heads/main/packages/create-s2ts/assets/s2tsmap.vmap)). If you are not using the example map you must set up the required entities yourself to use the features of this library.
+In hammer, you need to add a point_script entity that references your script. It should have a `targetname` key to allow other entities to trigger public methods in the script. It should also have a `script` key that references your script file. 
+> [!IMPORTANT]
+> Your script file path needs to have the `.vts` extension in hammer, even if it is a `.ts` file.
+
+![point_script_example](point_script_example.png "Example of a point_script to load an example.ts script")
+
+- Public functions can be declared, for example `Instance.PublicMethod("PublicFunc", () => {})` and then these can be called from hammer's input/output system by triggering an output to the point_script entity with the name of the public function in the "Via this input" field.
+
+![output_public_fun_example](output_public_fun_example.png "Example of an output triggering a public function on a point_script")
+
+- Public functions can also take string parameters but must be declared with the correct type, for example `Instance.PublicMethod("PublicFunc", (input: string) => {})`. Input in this case would be the value specified in the "With a parameter override of" field.

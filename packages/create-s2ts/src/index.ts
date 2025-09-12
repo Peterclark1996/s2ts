@@ -2,7 +2,6 @@
 
 import { existsSync, mkdirSync, writeFileSync } from "fs"
 import path from "path"
-import { s2tsmap } from "./s2tsmap"
 
 const rootPath = process.cwd().replace(/[\\/]+/g, "/")
 const sourcePathPart = "/content/csgo_addons"
@@ -40,16 +39,19 @@ const run = () => {
 
     const mainScript = `/// <reference types="s2ts/types/cspointscript" />
 import { Instance } from "cspointscript"
-import { runServerCommand } from "s2ts/counter-strike"
 
-Instance.Msg("Hello World!") // Runs when the script starts
+// Runs when the script starts
+Instance.Msg("Hello World!") 
 
+// Define a public method that can be called from the I/O system in the map.
 Instance.PublicMethod("PublicFunc", () => {
-    runServerCommand("say I just pressed the button!") // Runs when the script receives an input of "PublicFunc"
+
+    // Runs when the script receives an input of "PublicFunc"
+    Instance.Msg("I just pressed the button!")
+
 })`
 
     tryWriteFile(path.join(rootPath, "scripts/vscripts/main.ts"), mainScript, "utf8")
-    tryWriteFile(path.join(rootPath, "maps/s2tsmap.vmap"), s2tsmap, "base64")
 
     console.log("Successfully created s2ts project")
 }
