@@ -6,7 +6,7 @@ import fs from "node:fs"
 import { transpileFromTypeScript } from "./transpile"
 import type { VtsFile } from "./file"
 
-const supportedExtensions = [".js", ".ts", ".vts"]
+const supportedExtensions = [".ts", ".vts"]
 
 export const bundleImports = async (pathForProject: string, file: VtsFile): Promise<rollup.OutputChunk> => {
     const virtualPlugin = {
@@ -50,7 +50,7 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
             commonjs(),
             virtualPlugin
         ],
-        external: ["cspointscript"]
+        external: ["cspointscript", "cs_script/point_script"]
     })
 
     const { output } = await bundle.generate({

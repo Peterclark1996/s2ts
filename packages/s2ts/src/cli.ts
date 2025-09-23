@@ -4,21 +4,18 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import chokidar from "chokidar"
 import { addS2tsVersion } from "./compiler/version"
-import { compileToVtsc } from "./compiler/compile"
 import { transpileFromTypeScript } from "./compiler/transpile"
 import { bundleImports } from "./compiler/rollup"
 import type { VtsFile } from "./compiler/file"
 import { logger } from "./log"
-import { extractPublicMethods } from "./compiler/publicMethods"
 
 export const s2tsVersion = "0.0.0"
 
 const sourcePathPart = "/content/csgo_addons"
-const targetPathPart = "/game/csgo_addons"
 
 const start = (specifiedPath: string | undefined) => {
     const projectDir = standardisePath(specifiedPath ?? process.cwd())
-    const watchDir = standardisePath(path.join(projectDir, "./scripts"))
+    const watchDir = standardisePath(path.join(projectDir, "./scripts/vscripts"))
 
     if (!watchDir.includes(sourcePathPart)) {
         logger.error(
@@ -41,7 +38,13 @@ const start = (specifiedPath: string | undefined) => {
 }
 
 const processFileAtPath = async (pathFor: { project: string; file: string }) => {
-    if (!pathFor.file.endsWith(".vts") && !pathFor.file.endsWith(".ts")) return
+    if (!pathFor.file.endsWith(".vts") && !pathFor.file.endsWith(".ts")) {
+        return
+    }
+
+    if (pathFor.file.endsWith(".d.ts")) {
+        return
+    }
 
     const standardFilePath = standardisePath(pathFor.file)
 
@@ -52,9 +55,11 @@ const processFileAtPath = async (pathFor: { project: string; file: string }) => 
             content: readFileSync(standardFilePath).toString("utf-8")
         })
 
-        if (!compiledBuffer) return
+        if (!compiledBuffer) {
+            return
+        }
 
-        const outputFilePath = standardFilePath.replace(".vts", ".vts_c").replace(".ts", ".vts_c").replace(sourcePathPart, targetPathPart)
+        const outputFilePath = standardFilePath.replace(".vts", ".js").replace(".ts", ".js").replace("/scripts/vscripts/", "/scripts/vscripts/build/")
         mkdirSync(path.dirname(outputFilePath), { recursive: true })
         writeFileSync(outputFilePath, new Uint8Array(compiledBuffer))
 
@@ -64,31 +69,13 @@ const processFileAtPath = async (pathFor: { project: string; file: string }) => 
     }
 }
 
-export const processFileData = async (pathForProject: string, file: VtsFile) => {
-    const publicMethodsFromSource = extractPublicMethods(file.content)
-
+export const processFileData = async (pathForProject: string, file: VtsFile): Promise<Buffer | undefined> => {
     const transpiledResult = transpileFromTypeScript(file)
     if (!transpiledResult.success) return
 
     const bundledData = await bundleImports(pathForProject, { ...file, content: transpiledResult.output })
-    const bundledCode = bundledData.code
 
-    const publicMethodNamesFromSource = publicMethodsFromSource.map(method => method.methodName)
-    const publicMethodsFromBundle = []
-
-    for (const moduleId in bundledData.modules) {
-        if (moduleId === file.name || moduleId === file.path) continue
-
-        const standartModulePath = standardisePath(moduleId)
-        const moduleContent = readFileSync(standartModulePath).toString("utf-8")
-        const modulePublicMethods = extractPublicMethods(moduleContent)
-        publicMethodsFromBundle.push(...modulePublicMethods.filter(method => !publicMethodNamesFromSource.includes(method.methodName)))
-    }
-
-    const publicMethods = [...publicMethodsFromSource, ...publicMethodsFromBundle]
-
-    const bundledCodeWithVersion = addS2tsVersion(bundledCode)
-    return compileToVtsc(bundledCodeWithVersion, publicMethods)
+    return Buffer.from(addS2tsVersion(bundledData.code))
 }
 
 const standardisePath = (fullPath: string) => fullPath.replace(/[\\/]+/g, "/")

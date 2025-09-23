@@ -1,9 +1,0 @@
-{
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "module": "ESNext",
-        "noEmit": false,
-        "declaration": true
-    },
-    "include": ["./src/index.ts", "./src/counter-strike"]
-}
