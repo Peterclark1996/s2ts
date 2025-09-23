@@ -1,5 +1,5 @@
 import { ModuleKind, ScriptTarget, transpileModule, flattenDiagnosticMessageText } from "typescript"
-import { VtsFile } from "./file"
+import type { VtsFile } from "./file"
 import { logger } from "../log"
 
 export const transpileFromTypeScript = (file: VtsFile): { output: string; success: boolean } => {
@@ -17,7 +17,6 @@ export const transpileFromTypeScript = (file: VtsFile): { output: string; succes
     if (result.diagnostics && result.diagnostics.length > 0) {
         result.diagnostics.forEach(diagnostic => {
             const message = flattenDiagnosticMessageText(diagnostic.messageText, "\n")
-            const now = new Date()
             if (diagnostic.file && diagnostic.start !== undefined) {
                 const { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start)
                 logger.error(`Error in ${file.path} (${line + 1},${character + 1}): ${message}`)

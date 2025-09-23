@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
+import path from "node:path"
 import chokidar from "chokidar"
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
-import path from "path"
 import { addS2tsVersion } from "./compiler/version"
 import { compileToVtsc } from "./compiler/compile"
 import { transpileFromTypeScript } from "./compiler/transpile"
 import { bundleImports } from "./compiler/rollup"
-import { VtsFile } from "./compiler/file"
+import type { VtsFile } from "./compiler/file"
 import { logger } from "./log"
 import { extractPublicMethods } from "./compiler/publicMethods"
 
@@ -77,7 +77,7 @@ export const processFileData = async (pathForProject: string, file: VtsFile) => 
     const publicMethodsFromBundle = []
 
     for (const moduleId in bundledData.modules) {
-        if (moduleId == file.name || moduleId == file.path) continue
+        if (moduleId === file.name || moduleId === file.path) continue
 
         const standartModulePath = standardisePath(moduleId)
         const moduleContent = readFileSync(standartModulePath).toString("utf-8")

@@ -1,5 +1,5 @@
-import { readFileSync } from "fs"
-import path from "path"
+import { readFileSync } from "node:fs"
+import path from "node:path"
 import { processFileData } from "../src/cli"
 
 test("I can compile a vts file and get a correctly formed vts_c file", async () => {

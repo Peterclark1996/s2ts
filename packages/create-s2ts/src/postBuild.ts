@@ -1,5 +1,5 @@
-import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs"
-import path from "path"
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from "node:fs"
+import path from "node:path"
 
 const indexFilePath = path.join(process.cwd(), "dist/index.js")
 const fileContent = readFileSync(indexFilePath, "utf8")

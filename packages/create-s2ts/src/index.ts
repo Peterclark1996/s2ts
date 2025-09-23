@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { existsSync, mkdirSync, writeFileSync } from "fs"
-import path from "path"
+import { existsSync, mkdirSync, writeFileSync } from "node:fs"
+import path from "node:path"
 
 const rootPath = process.cwd().replace(/[\\/]+/g, "/")
 const sourcePathPart = "/content/csgo_addons"

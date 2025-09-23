@@ -1,4 +1,4 @@
-import { PublicMethodDeclaration } from "./publicMethods"
+import type { PublicMethodDeclaration } from "./publicMethods"
 
 export const compileToVtsc = (data: string, publicMethods: PublicMethodDeclaration[]): Buffer => {
     const dataSize = Buffer.byteLength(data, "utf-8")
@@ -37,7 +37,7 @@ export const compileToVtsc = (data: string, publicMethods: PublicMethodDeclarati
 const serializeCs2kv3 = (publicMethods: PublicMethodDeclaration[]): Uint8Array => {
     const bytes: number[] = []
     let textForBytes = publicMethods.reduce((acc, method) => {
-        return acc + `${method.methodName}\0${method.argType}\0`
+        return `${acc}${method.methodName}\0${method.argType}\0`
     }, "publicMethods\0")
 
     textForBytes += "\t\t"

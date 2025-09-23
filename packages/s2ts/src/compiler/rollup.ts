@@ -1,10 +1,10 @@
 import * as rollup from "rollup"
 import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
-import path from "path"
-import fs from "fs"
+import path from "node:path"
+import fs from "node:fs"
 import { transpileFromTypeScript } from "./transpile"
-import { VtsFile } from "./file"
+import type { VtsFile } from "./file"
 
 const supportedExtensions = [".js", ".ts", ".vts"]
 
@@ -44,10 +44,7 @@ export const bundleImports = async (pathForProject: string, file: VtsFile): Prom
         input: file.name,
         plugins: [
             resolve({
-                modulePaths: [
-		    path.join(pathForProject, "node_modules"),
-		    path.join(pathForProject, "scripts", "vscripts"),
-		],
+                modulePaths: [path.join(pathForProject, "node_modules"), path.join(pathForProject, "scripts", "vscripts")],
                 extensions: supportedExtensions
             }),
             commonjs(),

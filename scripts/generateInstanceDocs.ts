@@ -1,5 +1,5 @@
 import ts from "typescript"
-import fs from "fs"
+import fs from "node:fs"
 import doctrine from "doctrine"
 
 const filePath = "../packages/s2ts/types/cspointscript.d.ts"
