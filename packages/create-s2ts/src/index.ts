@@ -31,27 +31,54 @@ const run = () => {
         null,
         4
     )
-
     tryWriteFile(path.join(rootPath, "package.json"), packageJson, "utf8")
 
     tryCreateFolder(path.join(rootPath, "scripts"))
     tryCreateFolder(path.join(rootPath, "scripts/vscripts"))
 
-    const mainScript = `/// <reference types="s2ts/types/cspointscript" />
-import { Instance } from "cspointscript"
+    const mainScript = `import { Instance } from "cs_script/point_script"
 
 // Runs when the script starts
-Instance.Msg("Hello World!") 
-
-// Define a public method that can be called from the I/O system in the map.
-Instance.PublicMethod("PublicFunc", () => {
-
-    // Runs when the script receives an input of "PublicFunc"
-    Instance.Msg("I just pressed the button!")
-
-})`
+Instance.Msg("Hello World!") // Print "Hello World!" to the console
+Instance.ServerCommand("say Hello World!") // Print "Hello World!" to the chat
+`
 
     tryWriteFile(path.join(rootPath, "scripts/vscripts/main.ts"), mainScript, "utf8")
+
+    const definitionFile = `/// <reference types="s2ts/types/point_script" />`
+    tryWriteFile(path.join(rootPath, "scripts/vscripts/point_script.d.ts"), definitionFile, "utf8")
+
+    const tsconfigJson = `{
+    "compilerOptions": {
+        "target": "ES2022",
+        "useDefineForClassFields": true,
+        "lib": ["ES2022"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "moduleDetection": "force",
+        "noEmit": true,
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "erasableSyntaxOnly": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true,
+        "noUncheckedIndexedAccess": true,
+    },
+    "include": ["scripts/vscripts"]
+}`
+    tryWriteFile(path.join(rootPath, "tsconfig.json"), tsconfigJson, "utf8")
+
+    const gitignore = `/node_modules
+/scripts/vscripts/build`
+    tryWriteFile(path.join(rootPath, ".gitignore"), gitignore, "utf8")
 
     console.log("Successfully created s2ts project")
 }
