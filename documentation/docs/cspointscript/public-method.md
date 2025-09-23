@@ -2,6 +2,10 @@
 sidebar_position: 2
 ---
 
+import { DocsOutdatedAlert } from '@site/src/components/DocsOutdatedAlert';
+
+<DocsOutdatedAlert />
+
 # Instance.PublicMethod
 
 ## Definition

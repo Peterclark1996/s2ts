@@ -3,6 +3,10 @@ sidebar_position: 1
 sidebar_label: Exported Classes
 ---
 
+import { DocsOutdatedAlert } from '@site/src/components/DocsOutdatedAlert';
+
+<DocsOutdatedAlert />
+
 # Exported Classes
 
 ```ts title="Example usage of the Instance class"

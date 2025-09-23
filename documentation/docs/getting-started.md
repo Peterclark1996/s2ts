@@ -2,6 +2,10 @@
 sidebar_position: 1
 ---
 
+import { DocsOutdatedAlert } from '@site/src/components/DocsOutdatedAlert';
+
+<DocsOutdatedAlert />
+
 # 📝 Getting started 📝
 
 :::info
@@ -35,10 +39,6 @@ In hammer, you need to add a point_script entity that references your script. It
 > [!IMPORTANT]
 > Your script file path needs to have the `.vts` extension in hammer, even if it is a `.ts` file.
 
-![point_script_example](point_script_example.png "Example of a point_script to load an example.ts script")
-
 - Public functions can be declared, for example `Instance.PublicMethod("PublicFunc", () => {})` and then these can be called from hammer's input/output system by triggering an output to the point_script entity with the name of the public function in the "Via this input" field.
-
-![output_public_fun_example](output_public_fun_example.png "Example of an output triggering a public function on a point_script")
 
 - Public functions can also take string parameters but must be declared with the correct type, for example `Instance.PublicMethod("PublicFunc", (input: string) => {})`. Input in this case would be the value specified in the "With a parameter override of" field.

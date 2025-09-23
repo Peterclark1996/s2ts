@@ -5,11 +5,13 @@ import Layout from "@theme/Layout"
 import Heading from "@theme/Heading"
 
 import styles from "./index.module.css"
+import { DocsOutdatedAlert } from "../components/DocsOutdatedAlert"
 
 const Home = () => {
     const { siteConfig } = useDocusaurusContext()
     return (
         <Layout title="S2TS Docs" description={siteConfig.tagline}>
+            <DocsOutdatedAlert />
             <header className={clsx("hero hero--primary", styles.heroBanner)}>
                 <div className="container">
                     <Heading as="h1" className="hero__title">
