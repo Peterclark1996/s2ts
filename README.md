@@ -1,8 +1,9 @@
 # Source 2 TypeScript
 A counter strike 2 quick typescript project setup with bundler that automatically bundles all `.ts` typescript files.
 
-> [!NOTE]  
-> Now valve have officaily supported their JS interface, this project has been stripped back to a glorified typescript+rollup setup. But if you want all the needed tooling with two single line commands, then here it is!
+> [!IMPORTANT]  
+> Now valve have officaily supported their JS interface, this project has been stripped back to a glorified typescript + rollup setup.
+This project is no longer needed, I would recommend setting up typescript and some bundler yourself, or using this boilerplate project https://github.com/Source2ZE/cs_script_boilerplate
 
 ## Installation
 Run `npx create-s2ts@latest` at the root of your map folder. The folder should be something like `/Steam/steamapps/common/Counter-Strike Global Offensive/content/csgo_addons/<map-name>`. This will setup a node project and create an example script.
@@ -25,4 +26,4 @@ npm run start
 
 - While the workshop tools are running, the bundled `.js` files in the build folder will be compiled and accessable in your `point_script` entity.
 
-- Documentation for [Valves scripting API](https://developer.valvesoftware.com/wiki/Counter-Strike_2_Workshop_Tools/Scripting_API)
+- Documentation for [Valves scripting API](https://www.source2.wiki/Scripting/Counter-Strike%202/cs_script/functionList?game=cs2)
